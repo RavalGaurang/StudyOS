@@ -10,9 +10,18 @@
   "scripts": {
     "dev:backend": "npm run dev --workspace=backend",
     "dev:frontend": "npm run dev --workspace=frontend",
+    "dev": "npm run dev:backend",
+    "dev:dev": "npm run dev:dev --workspace=backend",
+    "dev:prod": "npm run dev:prod --workspace=backend",
     "build:backend": "npm run build --workspace=backend",
     "build:frontend": "npm run build --workspace=frontend",
     "build": "npm run build:backend && npm run build:frontend",
+    "build:dev": "npm run build:dev --workspace=backend && npm run build:dev --workspace=frontend",
+    "build:prod": "npm run build:prod --workspace=backend && npm run build:prod --workspace=frontend",
+    "start:backend": "npm run start --workspace=backend",
+    "start:frontend": "npm run start --workspace=frontend",
+    "start:dev": "npm run start:dev --workspace=backend",
+    "start:prod": "npm run start:prod --workspace=backend",
     "test:backend": "npm run test --workspace=backend",
     "test:frontend": "npm run test --workspace=frontend",
     "test": "npm run test:backend",
@@ -20,8 +29,10 @@
     "typecheck:frontend": "npm run typecheck --workspace=frontend",
     "typecheck": "npm run typecheck:backend && npm run typecheck:frontend",
     "prisma:generate": "npm run prisma:generate --workspace=backend",
-    "prisma:migrate": "npm run prisma:migrate --workspace=backend",
-    "prisma:seed": "npm run prisma:seed --workspace=backend"
+    "db:push:dev": "npm run db:push:dev --workspace=backend",
+    "db:push:prod": "npm run db:push:prod --workspace=backend",
+    "seed:dev": "npm run seed:dev --workspace=backend",
+    "seed:prod": "npm run seed:prod --workspace=backend"
   },
   "keywords": [
     "studyos",
@@ -32,5 +43,9 @@
     "full-stack"
   ],
   "author": "StudyOS Team",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "dotenv-cli": "^7.4.4"
+  }
 }

@@ -4,7 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 3000",
+    "dev:dev": "dotenv -e .env.development -- next dev -p 3000",
+    "dev:prod": "dotenv -e .env.production -- next dev -p 3000",
     "build": "next build",
+    "build:dev": "dotenv -e .env.development -- next build",
+    "build:prod": "dotenv -e .env.production -- next build",
     "start": "next start -p 3000",
     "typecheck": "tsc --noEmit",
     "lint": "next lint"
@@ -14,6 +18,8 @@
     "@reduxjs/toolkit": "^2.2.7",
     "axios": "^1.7.7",
     "clsx": "^2.1.1",
+    "cross-env": "^7.0.3",
+    "dotenv-cli": "^7.4.4",
     "lucide-react": "^0.439.0",
     "next": "^14.2.8",
     "react": "^18.3.1",

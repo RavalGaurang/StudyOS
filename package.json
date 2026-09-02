@@ -16,6 +16,7 @@
     "build:backend": "npm run build --workspace=backend",
     "build:frontend": "npm run build --workspace=frontend",
     "build": "npm run build:backend && npm run build:frontend",
+    "vercel-build": "npm run build --workspace=frontend",
     "build:dev": "npm run build:dev --workspace=backend && npm run build:dev --workspace=frontend",
     "build:prod": "npm run build:prod --workspace=backend && npm run build:prod --workspace=frontend",
     "start:backend": "npm run start --workspace=backend",

@@ -94,7 +94,7 @@ Your code is pushed to:
 5. Expand **"Environment Variables"** and add:
    | Key | Value |
    | :--- | :--- |
-   | `NEXT_PUBLIC_API_URL` | `https://studyos-backend.onrender.com/api/v1` *(Your Render backend URL + `/api/v1`)* |
+   | `NEXT_PUBLIC_API_URL` | `https://studyos-5r51.onrender.com/api/v1` *(Your Render backend URL + `/api/v1`)* |
 
 6. Click **"Deploy"**.
 7. In ~60 seconds, Vercel will give you a live production URL (e.g. `https://studyos-gaurang.vercel.app`) with free global CDN and SSL!

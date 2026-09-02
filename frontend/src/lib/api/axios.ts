@@ -1,6 +1,34 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/v1';
+/**
+ * Determine API Base URL intelligently:
+ * 1. Explicit NEXT_PUBLIC_API_URL from environment / build config
+ * 2. In browser production runtime (non-localhost hostname) -> live Render production API
+ * 3. In Node production build/runtime -> live Render production API
+ * 4. Local development -> http://localhost:5000/api/v1
+ */
+const getApiBaseUrl = (): string => {
+  let url = process.env.NEXT_PUBLIC_API_URL;
+
+  if (!url || url.trim() === '') {
+    const isBrowserProduction =
+      typeof window !== 'undefined' &&
+      window.location.hostname !== 'localhost' &&
+      window.location.hostname !== '127.0.0.1';
+
+    const isNodeProduction = process.env.NODE_ENV === 'production';
+
+    if (isBrowserProduction || isNodeProduction) {
+      url = 'https://studyos-5r51.onrender.com/api/v1';
+    } else {
+      url = 'http://localhost:5000/api/v1';
+    }
+  }
+
+  return url.replace(/\/+$/, '');
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,

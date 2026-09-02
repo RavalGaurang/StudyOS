@@ -1,39 +1,47 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 
 /**
- * Determine API Base URL intelligently:
- * 1. Explicit NEXT_PUBLIC_API_URL from environment / build config
- * 2. In browser production runtime (non-localhost hostname) -> live Render production API
- * 3. In Node production build/runtime -> live Render production API
- * 4. Local development -> http://localhost:5000/api/v1
+ * Intelligent Production & Local API Base URL Resolver
+ * 
+ * Rules:
+ * 1. When running on a remote/production hostname (e.g. *.vercel.app, *.onrender.com, custom domain):
+ *    - Never allow localhost URLs.
+ *    - Automatically use the live Render production API: https://studyos-5r51.onrender.com/api/v1
+ * 2. When running locally (localhost / 127.0.0.1):
+ *    - Use NEXT_PUBLIC_API_URL or fallback to http://localhost:5000/api/v1
  */
-const getApiBaseUrl = (): string => {
-  let url = process.env.NEXT_PUBLIC_API_URL;
+export function getApiBaseUrl(): string {
+  if (typeof window !== 'undefined') {
+    const hostname = window.location.hostname;
+    const isLocalhost =
+      hostname === 'localhost' ||
+      hostname === '127.0.0.1' ||
+      hostname === '0.0.0.0' ||
+      hostname.startsWith('192.168.') ||
+      hostname.startsWith('10.');
 
-  if (!url || url.trim() === '') {
-    const isBrowserProduction =
-      typeof window !== 'undefined' &&
-      window.location.hostname !== 'localhost' &&
-      window.location.hostname !== '127.0.0.1';
-
-    const isNodeProduction = process.env.NODE_ENV === 'production';
-
-    if (isBrowserProduction || isNodeProduction) {
-      url = 'https://studyos-5r51.onrender.com/api/v1';
-    } else {
-      url = 'http://localhost:5000/api/v1';
+    if (!isLocalhost) {
+      const configuredUrl = process.env.NEXT_PUBLIC_API_URL;
+      if (configuredUrl && !configuredUrl.includes('localhost') && !configuredUrl.includes('127.0.0.1')) {
+        return configuredUrl.replace(/\/+$/, '');
+      }
+      // Production fallback to live Render backend
+      return 'https://studyos-5r51.onrender.com/api/v1';
     }
   }
 
-  return url.replace(/\/+$/, '');
-};
+  const envUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (process.env.NODE_ENV === 'production' && (!envUrl || envUrl.includes('localhost'))) {
+    return 'https://studyos-5r51.onrender.com/api/v1';
+  }
 
-const API_BASE_URL = getApiBaseUrl();
+  return (envUrl || 'http://localhost:5000/api/v1').replace(/\/+$/, '');
+}
 
 export const apiClient = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: getApiBaseUrl(),
   withCredentials: true,
-  timeout: 15000,
+  timeout: 20000,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -60,9 +68,11 @@ export function getAccessToken(): string | null {
   return inMemoryToken;
 }
 
-// Interceptor Request: Attach Bearer Token
+// Interceptor Request: Dynamically set Base URL and attach Bearer Token
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
+    config.baseURL = getApiBaseUrl();
+
     const token = getAccessToken();
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -112,6 +122,7 @@ apiClient.interceptors.response.use(
             if (originalRequest.headers) {
               originalRequest.headers.Authorization = `Bearer ${token}`;
             }
+            originalRequest.baseURL = getApiBaseUrl();
             return apiClient(originalRequest);
           })
           .catch((err) => Promise.reject(err));
@@ -121,8 +132,9 @@ apiClient.interceptors.response.use(
       isRefreshing = true;
 
       try {
+        const currentBaseUrl = getApiBaseUrl();
         const refreshResponse = await axios.post(
-          `${API_BASE_URL}/auth/refresh`,
+          `${currentBaseUrl}/auth/refresh`,
           {},
           { withCredentials: true }
         );
@@ -133,6 +145,7 @@ apiClient.interceptors.response.use(
           if (originalRequest.headers) {
             originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
           }
+          originalRequest.baseURL = currentBaseUrl;
           processQueue(null, newAccessToken);
           return apiClient(originalRequest);
         } else {

@@ -1,0 +1,36 @@
+{
+  "name": "studyos-monorepo",
+  "version": "1.0.0",
+  "description": "StudyOS - Production-Grade Full-Stack Academic Operating System",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "dev:backend": "npm run dev --workspace=backend",
+    "dev:frontend": "npm run dev --workspace=frontend",
+    "build:backend": "npm run build --workspace=backend",
+    "build:frontend": "npm run build --workspace=frontend",
+    "build": "npm run build:backend && npm run build:frontend",
+    "test:backend": "npm run test --workspace=backend",
+    "test:frontend": "npm run test --workspace=frontend",
+    "test": "npm run test:backend",
+    "typecheck:backend": "npm run typecheck --workspace=backend",
+    "typecheck:frontend": "npm run typecheck --workspace=frontend",
+    "typecheck": "npm run typecheck:backend && npm run typecheck:frontend",
+    "prisma:generate": "npm run prisma:generate --workspace=backend",
+    "prisma:migrate": "npm run prisma:migrate --workspace=backend",
+    "prisma:seed": "npm run prisma:seed --workspace=backend"
+  },
+  "keywords": [
+    "studyos",
+    "education",
+    "saas",
+    "productivity",
+    "student",
+    "full-stack"
+  ],
+  "author": "StudyOS Team",
+  "license": "MIT"
+}

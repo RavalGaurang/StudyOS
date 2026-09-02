@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  
+  /* StudyOS Logo Exact Color Palette */
+  --brand-primary: #6366f1;
+  --brand-purple: #7c3aed;
+  --brand-magenta: #a855f7;
+  --brand-blue: #2563eb;
+  --brand-cyan: #06b6d4;
+  --brand-gradient: linear-gradient(135deg, #7c3aed 0%, #4f46e5 50%, #2563eb 100%);
+  --brand-gradient-hover: linear-gradient(135deg, #6d28d9 0%, #4338ca 50%, #1d4ed8 100%);
+  --brand-glow: 0 10px 25px -5px rgba(124, 58, 237, 0.35);
+
+  /* Light Theme */
+  --bg-main: #f8fafc;
+  --bg-card: #ffffff;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --border-color: #e2e8f0;
+
+  /* React-Select */
+  --select-bg: #ffffff;
+  --select-menu-bg: #ffffff;
+  --select-border: #e2e8f0;
+  --select-text: #0f172a;
+  --select-option-hover: #f5f3ff;
+}
+
+.dark {
+  /* Dark Theme */
+  --bg-main: #0b0f19;
+  --bg-card: #0f172a;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --border-color: #1e293b;
+
+  /* React-Select */
+  --select-bg: #0f172a;
+  --select-menu-bg: #0f172a;
+  --select-border: #334155;
+  --select-text: #f8fafc;
+  --select-option-hover: #1e1b4b;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+}
+
+.brand-gradient {
+  background: var(--brand-gradient);
+}
+
+.brand-gradient-hover:hover {
+  background: var(--brand-gradient-hover);
+}
+
+.brand-glow {
+  box-shadow: var(--brand-glow);
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.4);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(124, 58, 237, 0.6);
+}

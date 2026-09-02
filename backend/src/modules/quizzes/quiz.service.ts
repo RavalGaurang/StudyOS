@@ -105,7 +105,7 @@ export class QuizService {
     }
 
     // Transactional evaluation
-    return prisma.$transaction(async (tx) => {
+    return prisma.$transaction(async (tx: any) => {
       let totalQuestions = quiz.questions.length;
       let correctAnswersCount = 0;
       let wrongAnswersCount = 0;
@@ -119,7 +119,7 @@ export class QuizService {
         let marksAwarded = 0;
 
         if (studentAns && studentAns.selectedOptionId) {
-          const correctOpt = q.options.find((opt) => opt.isCorrect);
+          const correctOpt = q.options.find((opt: any) => opt.isCorrect);
           if (correctOpt && correctOpt.id === studentAns.selectedOptionId) {
             isCorrect = true;
             marksAwarded = q.marks;

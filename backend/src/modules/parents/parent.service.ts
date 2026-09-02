@@ -36,7 +36,7 @@ export class ParentService {
       },
     });
 
-    return links.map((link) => ({
+    return links.map((link: any) => ({
       relationshipId: link.id,
       relationship: link.relationship,
       studentId: link.student.id,

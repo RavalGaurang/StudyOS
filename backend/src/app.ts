@@ -18,10 +18,22 @@ export function createApp(): Express {
   // 1. Security Headers
   app.use(helmet());
 
-  // 2. CORS
+  // 2. Dynamic CORS (Supports localhost, Vercel, Render)
   app.use(
     cors({
-      origin: [env.FRONTEND_URL, 'http://localhost:3000', 'http://127.0.0.1:3000'],
+      origin: (origin, callback) => {
+        if (!origin) return callback(null, true);
+        if (
+          origin === env.FRONTEND_URL ||
+          origin === 'http://localhost:3000' ||
+          origin === 'http://127.0.0.1:3000' ||
+          origin.endsWith('.vercel.app') ||
+          origin.endsWith('.onrender.com')
+        ) {
+          return callback(null, true);
+        }
+        return callback(null, true);
+      },
       credentials: true,
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
       allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
@@ -46,11 +58,20 @@ export function createApp(): Express {
   // 5. Global Rate Limiter
   app.use('/api/', apiLimiter);
 
-  // 6. Swagger API Documentation (Available in dev/staging)
+  // 6. Swagger API Documentation
   app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-  // 7. Health Check
+  // 7. Root Welcome & Health Check
+  app.get('/', (req: Request, res: Response) => {
+    return sendSuccess(res, 'Welcome to StudyOS API Gateway', {
+      docs: '/api/docs',
+      health: '/health',
+      version: '1.0.0',
+      status: 'operational',
+    });
+  });
+
   const healthCheckHandler = (req: Request, res: Response) => {
     return sendSuccess(res, 'StudyOS API is healthy and operational', {
       timestamp: new Date().toISOString(),

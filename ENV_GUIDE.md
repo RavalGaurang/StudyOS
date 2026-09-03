@@ -48,7 +48,7 @@ NEXT_PUBLIC_API_URL=http://localhost:5000/api/v1
 | `JWT_REFRESH_SECRET` | `studyos_prod_jwt_refresh_secret_key_2026_super_secure_32chars` | Encrypts 7d HttpOnly refresh tokens |
 | `JWT_ACCESS_EXPIRES_IN` | `15m` | Access token lifespan |
 | `JWT_REFRESH_EXPIRES_IN` | `7d` | Refresh token lifespan |
-| `FRONTEND_URL` | `https://your-frontend.vercel.app` | Allowed CORS origin |
+| `FRONTEND_URL` | `https://study-raval-gauarngs-projects.vercel.app` | Allowed CORS origin |
 | `AI_PROVIDER` | `mock` | Pluggable AI engine |
 
 ---
@@ -56,4 +56,6 @@ NEXT_PUBLIC_API_URL=http://localhost:5000/api/v1
 ### 💻 Frontend (Vercel.com Environment Variables)
 | Variable Key | Production Value | Purpose |
 | :--- | :--- | :--- |
+| `NEXT_PUBLIC_APP_URL` | `https://study-raval-gauarngs-projects.vercel.app` | Stable Production Domain for client redirects & metadata |
 | `NEXT_PUBLIC_API_URL` | `https://studyos-5r51.onrender.com/api/v1` | Points browser Axios client to live Render backend API gateway |
+| `NEXT_PUBLIC_APP_NAME` | `StudyOS` | Application branding name |

@@ -17,6 +17,10 @@ const envSchema = z.object({
     .string()
     .min(1, 'NEXT_PUBLIC_APP_NAME must not be empty')
     .default('StudyOS'),
+  NEXT_PUBLIC_APP_URL: z
+    .string()
+    .url('NEXT_PUBLIC_APP_URL must be a valid URL')
+    .optional(),
 });
 
 const rawEnv = {
@@ -25,6 +29,7 @@ const rawEnv = {
     (process.env.NODE_ENV === 'production' ? 'production' : 'development'),
   NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
   NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME || 'StudyOS',
+  NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL || undefined,
 };
 
 const parsedEnv = envSchema.safeParse(rawEnv);
@@ -43,6 +48,7 @@ export const env = {
   appEnv: parsedEnv.data.NEXT_PUBLIC_APP_ENV,
   apiUrl: parsedEnv.data.NEXT_PUBLIC_API_URL.replace(/\/+$/, ''),
   appName: parsedEnv.data.NEXT_PUBLIC_APP_NAME,
+  appUrl: parsedEnv.data.NEXT_PUBLIC_APP_URL || (typeof window !== 'undefined' ? window.location.origin : 'https://study-raval-gauarngs-projects.vercel.app'),
   isDevelopment: parsedEnv.data.NEXT_PUBLIC_APP_ENV === 'development',
   isProduction: parsedEnv.data.NEXT_PUBLIC_APP_ENV === 'production',
   isTest: parsedEnv.data.NEXT_PUBLIC_APP_ENV === 'test',
@@ -59,6 +65,7 @@ export function getSafeEnvDiagnostics() {
     appEnv: env.appEnv,
     apiUrl: env.apiUrl,
     appName: env.appName,
+    appUrl: env.appUrl,
     isDevelopment: env.isDevelopment,
     isProduction: env.isProduction,
   };

@@ -8,15 +8,15 @@ This guide walks you through deploying **StudyOS** (Frontend + Backend + Postgre
 
 ```
 ┌────────────────────────────────────────────────────────┐
-│               Frontend (Next.js 14)                    │
+│               Frontend (Next.js 16)                    │
 │            Hosted on VERCEL (Free Tier)                │
-│             https://studyos.vercel.app                 │
+│   https://study-raval-gauarngs-projects.vercel.app     │
 └──────────────────────────┬─────────────────────────────┘
                            │ HTTPS / REST API
 ┌──────────────────────────▼─────────────────────────────┐
 │             Backend API (Node.js/Express)              │
 │            Hosted on RENDER (Free Web Service)         │
-│          https://studyos-backend.onrender.com          │
+│          https://studyos-5r51.onrender.com             │
 └──────────────────────────┬─────────────────────────────┘
                            │ SSL Connection String
 ┌──────────────────────────▼─────────────────────────────┐
@@ -73,39 +73,56 @@ Your code is pushed to:
    | `JWT_REFRESH_SECRET` | `studyos_super_secret_jwt_refresh_key_prod_2026` |
    | `JWT_ACCESS_EXPIRES_IN` | `15m` |
    | `JWT_REFRESH_EXPIRES_IN` | `7d` |
-   | `FRONTEND_URL` | `https://your-studyos-frontend.vercel.app` *(update after Step 4)* |
+   | `FRONTEND_URL` | `https://study-raval-gauarngs-projects.vercel.app` |
 
 6. Click **"Deploy Web Service"**.
 7. Render will build your backend, connect to PostgreSQL, push the schema, run demo seed data, and start the API!
-8. Copy your live Backend URL (e.g. `https://studyos-backend.onrender.com`).
+8. Copy your live Backend URL (e.g. `https://studyos-5r51.onrender.com`).
 
 ---
 
-## 💻 Step 4: Deploy Frontend Web App on Vercel (Free)
+## 💻 Step 4: Frontend Web App on Vercel
 
-1. Go to **[https://vercel.com](https://vercel.com)** and log in with your GitHub account.
-2. Click **"Add New..."** $\rightarrow$ Select **"Project"**.
-3. Import your **`RavalGaurang/StudyOS`** repository.
-4. In the Project Setup screen:
-   - **Framework Preset**: `Next.js`
-   - **Root Directory**: Click **Edit** $\rightarrow$ Select **`frontend`**
-   - **Build Command**: `npm run build`
-   - **Output Directory**: `.next`
-5. Expand **"Environment Variables"** and add:
-   | Key | Value |
-   | :--- | :--- |
-   | `NEXT_PUBLIC_API_URL` | `https://studyos-5r51.onrender.com/api/v1` *(Your Render backend URL + `/api/v1`)* |
+Your frontend uses your existing Vercel project **`study`** under team **`raval-gauarngs-projects`**.
 
-6. Click **"Deploy"**.
-7. In ~60 seconds, Vercel will give you a live production URL (e.g. `https://studyos-gaurang.vercel.app`) with free global CDN and SSL!
+### 1. Stable Production Domain vs Deployment URLs
+- **Stable Production URL**: `https://study-raval-gauarngs-projects.vercel.app`
+- **Unique Deployment URLs** (e.g. `https://study-xxxx-raval-gauarngs-projects.vercel.app`): Generated for each build for logs and inspection. Do NOT use or share these as the app URL.
+
+### 2. Vercel Project Settings Verification
+1. **Domains**: In Vercel Project Settings $\rightarrow$ **Domains**, confirm `study-raval-gauarngs-projects.vercel.app` is assigned to **Production** (Branch: `main`).
+2. **Git**: In Vercel Project Settings $\rightarrow$ **Git**, verify **Production Branch** is set to `main`.
+3. **Deployment Protection**: In Vercel Project Settings $\rightarrow$ **Deployment Protection**, ensure **Vercel Authentication** is **Disabled** for Production Deployments (or set to *Only Preview Deployments*). This ensures `/dashboard` is publicly reachable and protected by your application's own authentication instead of prompting "Log in to Vercel".
+4. **Environment Variables**:
+   | Key | Value | Target |
+   | :--- | :--- | :--- |
+   | `NEXT_PUBLIC_APP_ENV` | `production` | Production, Preview |
+   | `NEXT_PUBLIC_APP_URL` | `https://study-raval-gauarngs-projects.vercel.app` | Production |
+   | `NEXT_PUBLIC_API_URL` | `https://studyos-5r51.onrender.com/api/v1` | Production, Preview |
+   | `NEXT_PUBLIC_APP_NAME` | `StudyOS` | Production, Preview |
+
+### 3. Future Deployment Workflow
+
+Pushing commits to `main` automatically updates the same production URL:
+```bash
+git add .
+git commit -m "Update application"
+git push origin main
+```
+
+If deploying via Vercel CLI, deploy directly to production using:
+```bash
+npx vercel --prod
+```
+*(Running `vercel` without `--prod` only creates a preview deployment and will not update the production domain).*
 
 ---
 
 ## 🔄 Step 5: Final CORS Sync
 
-Go back to your **Render.com** backend dashboard $\rightarrow$ **Environment Variables** $\rightarrow$ Set `FRONTEND_URL` to your live Vercel URL (e.g. `https://studyos-gaurang.vercel.app`) so secure cookies and CORS requests are accepted.
+In your **Render.com** backend dashboard $\rightarrow$ **Environment Variables** $\rightarrow$ Set `FRONTEND_URL` to `https://study-raval-gauarngs-projects.vercel.app`.
 
 ---
 
 ## 🎉 You're Live!
-Your full-stack commercial SaaS platform is now running in production on 100% free cloud infrastructure!
+Your full-stack commercial SaaS platform is running in production on `https://study-raval-gauarngs-projects.vercel.app`!

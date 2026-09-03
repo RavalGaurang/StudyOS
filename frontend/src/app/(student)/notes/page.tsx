@@ -17,8 +17,8 @@ import { EmptyState } from '../../../components/ui/EmptyState';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Plus, Pin, Search, Tag, BookMarked, Trash2, Edit3 } from 'lucide-react';
-import { formatDate } from '../../../lib/utils';
+import { Plus, Pin, Search, Tag, BookMarked, Trash2, Edit3, ArrowLeft } from 'lucide-react';
+import { formatDate, cn } from '../../../lib/utils';
 
 const noteSchema = z.object({
   title: z.string().min(1, 'Title is required').max(200),
@@ -37,6 +37,7 @@ export default function NotesPage() {
   const [selectedSubject, setSelectedSubject] = useState('');
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
+  const [mobileView, setMobileView] = useState<'list' | 'viewer'>('list');
 
   const {
     control,
@@ -198,13 +199,21 @@ export default function NotesPage() {
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Note List (1 Col) */}
-          <div className="space-y-3 max-h-[75vh] overflow-y-auto pr-1">
+          <div
+            className={cn(
+              'space-y-3 max-h-[75vh] overflow-y-auto pr-1',
+              mobileView === 'viewer' ? 'hidden lg:block' : 'block'
+            )}
+          >
             {notes.map((note) => {
               const isSelected = selectedNote?.id === note.id;
               return (
                 <Card
                   key={note.id}
-                  onClick={() => setSelectedNote(note)}
+                  onClick={() => {
+                    setSelectedNote(note);
+                    setMobileView('viewer');
+                  }}
                   className={`p-4 cursor-pointer transition-all ${
                     isSelected
                       ? 'border-indigo-500 ring-2 ring-indigo-500/20 bg-indigo-50/20 dark:bg-indigo-950/20'
@@ -256,9 +265,17 @@ export default function NotesPage() {
           </div>
 
           {/* Note Full Content Viewer (2 Cols) */}
-          <div className="lg:col-span-2">
+          <div className={cn('lg:col-span-2', mobileView === 'list' ? 'hidden lg:block' : 'block')}>
+            {mobileView === 'viewer' && (
+              <button
+                onClick={() => setMobileView('list')}
+                className="lg:hidden inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 dark:text-indigo-400 mb-3 px-2 py-1 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-950/50"
+              >
+                <ArrowLeft className="w-4 h-4" /> Back to Notes List
+              </button>
+            )}
             {selectedNote ? (
-              <Card className="p-6 h-full flex flex-col justify-between space-y-6">
+              <Card className="p-4 sm:p-6 h-full flex flex-col justify-between space-y-6">
                 <div>
                   <div className="flex items-start justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-800">
                     <div>

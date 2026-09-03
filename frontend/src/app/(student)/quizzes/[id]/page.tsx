@@ -122,70 +122,65 @@ export default function TakeQuizPage() {
       </div>
 
       {/* Quiz Details Banner */}
-      <Card className="p-6 bg-slate-900 text-white border-slate-800">
+      <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-violet-700 text-white shadow-xl shadow-indigo-500/15 border border-indigo-400/30">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
               {quiz.subject && (
                 <span
-                  className="text-xs font-bold px-2 py-0.5 rounded"
-                  style={{
-                    backgroundColor: `${quiz.subject.color}25`,
-                    color: quiz.subject.color,
-                  }}
+                  className="text-xs font-bold px-2 py-0.5 rounded bg-white/20 text-white"
                 >
                   {quiz.subject.name}
                 </span>
               )}
-              <span className="text-xs text-slate-400">
+              <span className="text-xs text-indigo-100">
                 {questions.length} Questions • {quiz.totalMarks} Total Marks
               </span>
             </div>
             <h1 className="text-2xl font-black text-white mt-1">{quiz.title}</h1>
             {quiz.description && (
-              <p className="text-xs text-slate-300 mt-1">{quiz.description}</p>
+              <p className="text-xs text-indigo-100 mt-1">{quiz.description}</p>
             )}
           </div>
         </div>
-      </Card>
+      </div>
 
       {/* Results View when Attempt Completed */}
       {attemptResult && (
-        <Card className="p-6 bg-gradient-to-r from-indigo-900/40 via-purple-900/40 to-slate-900 border-indigo-500/30 text-center space-y-4">
-          <div className="w-12 h-12 rounded-full bg-indigo-600 text-white flex items-center justify-center mx-auto shadow-lg shadow-indigo-500/30">
-            <Award className="w-6 h-6" />
+        <div className="p-6 rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-violet-700 text-white shadow-xl shadow-indigo-500/20 border border-indigo-400/30 text-center space-y-4">
+          <div className="w-12 h-12 rounded-full bg-white text-indigo-600 flex items-center justify-center mx-auto shadow-lg">
+            <Award className="w-6 h-6 text-indigo-600" />
           </div>
           <div>
             <h2 className="text-2xl font-black text-white">
               Quiz Completed! You scored {attemptResult.score} / {quiz.totalMarks} (
               {attemptResult.percentage}%)
             </h2>
-            <p className="text-xs text-slate-300 mt-1">
+            <p className="text-xs text-indigo-100 mt-1">
               Correct: {attemptResult.correctAnswers} • Wrong: {attemptResult.wrongAnswers} •
               Time: {formatTimer(attemptResult.timeSpentSeconds)}
             </p>
           </div>
 
-          <div className="flex items-center justify-center gap-3 pt-2">
-            <Button
-              variant="outline"
-              size="sm"
+          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+            <button
               onClick={() => {
                 setAttemptResult(null);
                 setSelectedAnswers({});
                 setTimeRemaining((quiz.durationMinutes || 15) * 60);
               }}
-              leftIcon={<RotateCcw className="w-3.5 h-3.5" />}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-white/20 hover:bg-white/30 text-white border border-white/25 backdrop-blur-sm transition-all active:scale-[0.98]"
             >
-              Retake Quiz
-            </Button>
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>Retake Quiz</span>
+            </button>
             <Link href="/quizzes">
-              <Button variant="primary" size="sm">
+              <button className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-white text-indigo-700 hover:bg-indigo-50 shadow-md transition-all active:scale-[0.98]">
                 Done & Return
-              </Button>
+              </button>
             </Link>
           </div>
-        </Card>
+        </div>
       )}
 
       {/* Questions Form */}

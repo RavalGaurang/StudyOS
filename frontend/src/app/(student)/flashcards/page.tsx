@@ -182,14 +182,14 @@ export default function FlashcardsPage() {
           {/* 3D Flip Card Container */}
           <div
             onClick={() => setIsFlipped(!isFlipped)}
-            className="min-h-[280px] p-8 rounded-3xl border-2 border-indigo-500/30 bg-gradient-to-br from-slate-900 via-indigo-950/40 to-slate-950 shadow-2xl flex flex-col justify-between items-center text-center cursor-pointer select-none transition-all hover:scale-[1.01]"
+            className="min-h-[240px] sm:min-h-[280px] p-5 sm:p-8 rounded-3xl border-2 border-indigo-500/30 bg-gradient-to-br from-indigo-900 via-slate-900 to-slate-950 shadow-2xl flex flex-col justify-between items-center text-center cursor-pointer select-none transition-all hover:scale-[1.01]"
           >
             <span className="text-[10px] font-extrabold uppercase tracking-widest text-indigo-400">
               {isFlipped ? 'Answer / Concept Details' : 'Question / Concept Prompt'} (Click to Flip)
             </span>
 
-            <div className="my-auto">
-              <h2 className="text-xl sm:text-2xl font-black text-white leading-relaxed">
+            <div className="my-auto py-4">
+              <h2 className="text-lg sm:text-2xl font-black text-white leading-relaxed">
                 {isFlipped ? currentCard.back : currentCard.front}
               </h2>
             </div>
@@ -203,7 +203,7 @@ export default function FlashcardsPage() {
           {isFlipped ? (
             <div className="space-y-2 text-center animate-in fade-in">
               <p className="text-xs font-bold text-slate-500">How well did you know this?</p>
-              <div className="grid grid-cols-5 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
                 <Button variant="danger" size="sm" onClick={() => handleReview(1)}>
                   1: Again (1d)
                 </Button>
@@ -216,7 +216,12 @@ export default function FlashcardsPage() {
                 <Button variant="primary" size="sm" onClick={() => handleReview(4)}>
                   4: Easy (14d)
                 </Button>
-                <Button variant="success" size="sm" onClick={() => handleReview(5)}>
+                <Button
+                  variant="success"
+                  size="sm"
+                  onClick={() => handleReview(5)}
+                  className="col-span-2 sm:col-span-1"
+                >
                   5: Master (30d)
                 </Button>
               </div>

@@ -117,17 +117,17 @@ export default function AttendancePage() {
       </div>
 
       {/* Overview Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <Card className="border-l-4 border-l-indigo-500">
-          <span className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <Card className="p-3.5 sm:p-5 border-l-4 border-l-indigo-500">
+          <span className="text-[11px] sm:text-xs font-bold uppercase text-slate-500 dark:text-slate-400">
             Overall Attendance
           </span>
-          <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-3xl font-black text-slate-900 dark:text-slate-100">
+          <div className="mt-2 flex flex-wrap items-baseline gap-1.5">
+            <span className="text-xl sm:text-3xl font-black text-slate-900 dark:text-slate-100">
               {metrics.overallPercentage}%
             </span>
             <span
-              className={`text-xs font-bold ${
+              className={`text-[10px] sm:text-xs font-bold ${
                 metrics.overallPercentage >= 85 ? 'text-emerald-500' : 'text-rose-500'
               }`}
             >
@@ -136,42 +136,42 @@ export default function AttendancePage() {
           </div>
         </Card>
 
-        <Card className="border-l-4 border-l-emerald-500">
-          <span className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">
+        <Card className="p-3.5 sm:p-5 border-l-4 border-l-emerald-500">
+          <span className="text-[11px] sm:text-xs font-bold uppercase text-slate-500 dark:text-slate-400">
             Classes Present
           </span>
           <div className="mt-2">
-            <span className="text-3xl font-black text-slate-900 dark:text-slate-100">
+            <span className="text-xl sm:text-3xl font-black text-slate-900 dark:text-slate-100">
               {metrics.presentCount}
             </span>
-            <span className="text-xs text-slate-400 block mt-0.5">
+            <span className="text-[10px] sm:text-xs text-slate-400 block mt-0.5">
               out of {metrics.totalClasses} total
             </span>
           </div>
         </Card>
 
-        <Card className="border-l-4 border-l-rose-500">
-          <span className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">
+        <Card className="p-3.5 sm:p-5 border-l-4 border-l-rose-500">
+          <span className="text-[11px] sm:text-xs font-bold uppercase text-slate-500 dark:text-slate-400">
             Classes Absent
           </span>
           <div className="mt-2">
-            <span className="text-3xl font-black text-rose-500">
+            <span className="text-xl sm:text-3xl font-black text-rose-500">
               {metrics.absentCount}
             </span>
-            <span className="text-xs text-slate-400 block mt-0.5">unexcused absences</span>
+            <span className="text-[10px] sm:text-xs text-slate-400 block mt-0.5">unexcused</span>
           </div>
         </Card>
 
-        <Card className="border-l-4 border-l-amber-500">
-          <span className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">
+        <Card className="p-3.5 sm:p-5 border-l-4 border-l-amber-500">
+          <span className="text-[11px] sm:text-xs font-bold uppercase text-slate-500 dark:text-slate-400">
             Late / Excused
           </span>
           <div className="mt-2">
-            <span className="text-3xl font-black text-amber-500">
+            <span className="text-xl sm:text-3xl font-black text-amber-500">
               {metrics.lateCount + metrics.excusedCount}
             </span>
-            <span className="text-xs text-slate-400 block mt-0.5">
-              ({metrics.lateCount} late, {metrics.excusedCount} excused)
+            <span className="text-[10px] sm:text-xs text-slate-400 block mt-0.5">
+              ({metrics.lateCount} late, {metrics.excusedCount} exc)
             </span>
           </div>
         </Card>

@@ -148,21 +148,21 @@ export default function SubjectDetailPage() {
       </div>
 
       {/* Progress & Quick Stats Card */}
-      <Card className="bg-slate-900 text-white border-slate-800">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 divide-y md:divide-y-0 md:divide-x divide-slate-800">
+      <Card className="p-4 sm:p-5 border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 divide-y sm:divide-y-0 md:divide-x divide-slate-100 dark:divide-slate-800">
           <div className="p-2">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
               Syllabus Progress
             </span>
             <div className="flex items-baseline gap-2 mt-1">
-              <span className="text-3xl font-black text-indigo-400">
+              <span className="text-3xl font-black text-indigo-600 dark:text-indigo-400">
                 {subject.syllabusProgress || 0}%
               </span>
               <span className="text-xs text-slate-400">
                 ({subject.completedTopics}/{subject.totalTopics} Topics)
               </span>
             </div>
-            <div className="w-full h-1.5 rounded-full bg-slate-800 mt-3 overflow-hidden">
+            <div className="w-full h-1.5 rounded-full bg-slate-100 dark:bg-slate-800 mt-3 overflow-hidden">
               <div
                 className="h-full rounded-full bg-indigo-500 transition-all"
                 style={{ width: `${subject.syllabusProgress || 0}%` }}
@@ -170,21 +170,21 @@ export default function SubjectDetailPage() {
             </div>
           </div>
 
-          <div className="p-2 md:pl-6">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+          <div className="p-2 md:pl-6 pt-3 sm:pt-2">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
               Units Structure
             </span>
-            <div className="text-2xl font-black text-white mt-1">
+            <div className="text-2xl font-black text-slate-900 dark:text-slate-100 mt-1">
               {subject.units.length} Units
             </div>
             <span className="text-xs text-slate-400 mt-1 block">Course breakdown</span>
           </div>
 
-          <div className="p-2 md:pl-6">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+          <div className="p-2 md:pl-6 pt-3 sm:pt-2">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
               Target Grade
             </span>
-            <div className="text-2xl font-black text-emerald-400 mt-1">
+            <div className="text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-1">
               {subject.targetGrade || 'A'}
             </div>
             <span className="text-xs text-slate-400 mt-1 block">
@@ -192,7 +192,7 @@ export default function SubjectDetailPage() {
             </span>
           </div>
 
-          <div className="p-2 md:pl-6 flex items-center gap-2">
+          <div className="p-2 md:pl-6 pt-3 sm:pt-2 flex items-center">
             <Link href={`/quizzes?subjectId=${subject.id}`} className="w-full">
               <Button variant="secondary" size="sm" className="w-full text-xs font-bold">
                 Generate Quiz on Syllabus

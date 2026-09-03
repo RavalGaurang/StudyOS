@@ -29,6 +29,10 @@ export const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children })
     }
   }, [isAuthPage, isLoading, isAuthenticated, router]);
 
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
+
   if (isAuthPage) {
     return <>{children}</>;
   }
@@ -51,13 +55,16 @@ export const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children })
 
   return (
     <div className="min-h-screen flex bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans antialiased">
-      {/* Role-based Desktop Sidebar */}
-      <Sidebar />
+      {/* Role-based Desktop & Mobile Sidebar */}
+      <Sidebar
+        mobileOpen={mobileMenuOpen}
+        onMobileClose={() => setMobileMenuOpen(false)}
+      />
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 pb-16 md:pb-0">
         <Header onMobileMenuToggle={() => setMobileMenuOpen(!mobileMenuOpen)} />
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto animate-in fade-in duration-300">
+        <main className="flex-1 p-3 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto animate-in fade-in duration-300">
           {children}
         </main>
       </div>

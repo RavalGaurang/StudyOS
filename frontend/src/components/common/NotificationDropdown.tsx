@@ -30,7 +30,7 @@ export const NotificationDropdown: React.FC<{ onClose: () => void }> = ({ onClos
   };
 
   return (
-    <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-2xl border border-slate-200 bg-white p-3 shadow-2xl dark:border-slate-800 dark:bg-slate-900 z-50 animate-in fade-in">
+    <div className="absolute right-0 mt-2 w-[calc(100vw-2rem)] sm:w-96 max-w-sm rounded-2xl border border-slate-200 bg-white p-3 shadow-2xl dark:border-slate-800 dark:bg-slate-900 z-50 animate-in fade-in">
       <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-100 dark:border-slate-800">
         <h4 className="text-xs font-bold text-slate-900 dark:text-slate-100">Notifications</h4>
         <button

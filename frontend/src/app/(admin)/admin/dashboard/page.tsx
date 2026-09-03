@@ -62,7 +62,7 @@ export default function AdminDashboardPage() {
   return (
     <div className="space-y-6">
       {/* Banner */}
-      <div className="flex items-center justify-between p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950/40 to-slate-950 border border-slate-800">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white shadow-xl border border-indigo-500/30">
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
@@ -70,57 +70,57 @@ export default function AdminDashboardPage() {
             </h1>
             <Shield className="w-5 h-5 text-indigo-400" />
           </div>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-slate-300 mt-1">
             Production multi-tenant platform metrics, user directory, and database status.
           </p>
         </div>
 
         <Link href="/admin/users">
-          <Button variant="primary" size="sm">
+          <Button variant="primary" size="sm" className="whitespace-nowrap">
             Manage All Users
           </Button>
         </Link>
       </div>
 
       {/* Metric KPI Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="border-l-4 border-l-indigo-500">
-          <span className="text-xs font-bold uppercase text-slate-400">Total Users</span>
-          <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-3xl font-black text-slate-900 dark:text-slate-100">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <Card className="p-3.5 sm:p-5 border-l-4 border-l-indigo-500">
+          <span className="text-[11px] sm:text-xs font-bold uppercase text-slate-400">Total Users</span>
+          <div className="mt-2 flex flex-wrap items-baseline gap-1.5">
+            <span className="text-xl sm:text-3xl font-black text-slate-900 dark:text-slate-100">
               {stats.totalUsers}
             </span>
-            <span className="text-xs text-slate-400">accounts</span>
+            <span className="text-[10px] sm:text-xs text-slate-400">accounts</span>
           </div>
         </Card>
 
-        <Card className="border-l-4 border-l-emerald-500">
-          <span className="text-xs font-bold uppercase text-slate-400">Students Active</span>
-          <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-3xl font-black text-emerald-500">
+        <Card className="p-3.5 sm:p-5 border-l-4 border-l-emerald-500">
+          <span className="text-[11px] sm:text-xs font-bold uppercase text-slate-400">Students Active</span>
+          <div className="mt-2 flex flex-wrap items-baseline gap-1.5">
+            <span className="text-xl sm:text-3xl font-black text-emerald-500">
               {stats.totalStudents}
             </span>
-            <span className="text-xs text-slate-400">enrolled</span>
+            <span className="text-[10px] sm:text-xs text-slate-400">enrolled</span>
           </div>
         </Card>
 
-        <Card className="border-l-4 border-l-amber-500">
-          <span className="text-xs font-bold uppercase text-slate-400">Total Study Hours</span>
-          <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-3xl font-black text-amber-500">
+        <Card className="p-3.5 sm:p-5 border-l-4 border-l-amber-500">
+          <span className="text-[11px] sm:text-xs font-bold uppercase text-slate-400">Total Study Hours</span>
+          <div className="mt-2 flex flex-wrap items-baseline gap-1.5">
+            <span className="text-xl sm:text-3xl font-black text-amber-500">
               {stats.totalStudyHours}h
             </span>
-            <span className="text-xs text-slate-400">logged</span>
+            <span className="text-[10px] sm:text-xs text-slate-400">logged</span>
           </div>
         </Card>
 
-        <Card className="border-l-4 border-l-purple-500">
-          <span className="text-xs font-bold uppercase text-slate-400">Total Tasks</span>
-          <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-3xl font-black text-purple-500">
+        <Card className="p-3.5 sm:p-5 border-l-4 border-l-purple-500">
+          <span className="text-[11px] sm:text-xs font-bold uppercase text-slate-400">Total Tasks</span>
+          <div className="mt-2 flex flex-wrap items-baseline gap-1.5">
+            <span className="text-xl sm:text-3xl font-black text-purple-500">
               {stats.totalTasks}
             </span>
-            <span className="text-xs text-slate-400">created</span>
+            <span className="text-[10px] sm:text-xs text-slate-400">created</span>
           </div>
         </Card>
       </div>

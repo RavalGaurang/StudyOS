@@ -187,7 +187,7 @@ export default function TasksPage() {
             />
           </form>
 
-          <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
+          <div className="grid grid-cols-3 gap-2 w-full md:flex md:w-auto md:items-center">
             {/* Due Filter */}
             <select
               value={dueFilter}
@@ -195,10 +195,10 @@ export default function TasksPage() {
                 setDueFilter(e.target.value);
                 setPage(1);
               }}
-              className="px-2.5 py-1.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200"
+              className="w-full px-2.5 py-1.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200"
             >
-              <option value="all">All Deadlines</option>
-              <option value="today">Due Today</option>
+              <option value="all">All Due</option>
+              <option value="today">Today</option>
               <option value="upcoming">Upcoming</option>
               <option value="overdue">Overdue</option>
             </select>
@@ -210,11 +210,11 @@ export default function TasksPage() {
                 setStatusFilter(e.target.value);
                 setPage(1);
               }}
-              className="px-2.5 py-1.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200"
+              className="w-full px-2.5 py-1.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200"
             >
-              <option value="ALL">All Statuses</option>
+              <option value="ALL">All Status</option>
               <option value="TODO">To-Do</option>
-              <option value="IN_PROGRESS">In Progress</option>
+              <option value="IN_PROGRESS">Progress</option>
               <option value="COMPLETED">Completed</option>
             </select>
 
@@ -225,9 +225,9 @@ export default function TasksPage() {
                 setPriorityFilter(e.target.value);
                 setPage(1);
               }}
-              className="px-2.5 py-1.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200"
+              className="w-full px-2.5 py-1.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200"
             >
-              <option value="ALL">All Priorities</option>
+              <option value="ALL">All Priority</option>
               <option value="URGENT">Urgent</option>
               <option value="HIGH">High</option>
               <option value="MEDIUM">Medium</option>
@@ -255,15 +255,15 @@ export default function TasksPage() {
           {tasks.map((task) => (
             <Card
               key={task.id}
-              className={`p-4 flex items-center justify-between gap-4 transition-all ${
+              className={`p-3.5 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 transition-all ${
                 task.status === 'COMPLETED' ? 'opacity-60 bg-slate-50/50 dark:bg-slate-900/30' : ''
               }`}
             >
-              <div className="flex items-center gap-3 min-w-0">
+              <div className="flex items-start sm:items-center gap-3 min-w-0 flex-1">
                 <button
                   type="button"
                   onClick={() => handleToggle(task.id)}
-                  className={`w-5 h-5 rounded-md flex items-center justify-center border transition-all ${
+                  className={`w-5 h-5 mt-0.5 sm:mt-0 flex-shrink-0 rounded-md flex items-center justify-center border transition-all ${
                     task.status === 'COMPLETED'
                       ? 'bg-emerald-600 border-emerald-600 text-white'
                       : 'border-slate-300 dark:border-slate-600 hover:border-indigo-500'
@@ -272,7 +272,7 @@ export default function TasksPage() {
                   {task.status === 'COMPLETED' && <Check className="w-3.5 h-3.5" />}
                 </button>
 
-                <div className="min-w-0">
+                <div className="min-w-0 flex-1">
                   <h4
                     className={`text-sm font-bold truncate ${
                       task.status === 'COMPLETED'
@@ -287,10 +287,10 @@ export default function TasksPage() {
                       {task.description}
                     </p>
                   )}
-                  <div className="flex items-center gap-3 mt-1.5 text-[11px] text-slate-400">
+                  <div className="flex flex-wrap items-center gap-2 mt-1 text-[11px] text-slate-400">
                     {task.subject && (
                       <span
-                        className="font-bold px-1.5 py-0.2 rounded"
+                        className="font-bold px-1.5 py-0.2 rounded flex-shrink-0"
                         style={{
                           backgroundColor: `${task.subject.color}15`,
                           color: task.subject.color,
@@ -300,7 +300,7 @@ export default function TasksPage() {
                       </span>
                     )}
                     {task.dueDate && (
-                      <span className="flex items-center gap-1">
+                      <span className="flex items-center gap-1 flex-shrink-0">
                         <Calendar className="w-3 h-3" />
                         Due {formatDate(task.dueDate)}
                       </span>
@@ -309,7 +309,7 @@ export default function TasksPage() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-center justify-between sm:justify-end gap-2.5 sm:gap-3 w-full sm:w-auto pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100 dark:border-slate-800/80">
                 <Badge
                   variant={
                     task.priority === 'URGENT'
@@ -318,6 +318,7 @@ export default function TasksPage() {
                       ? 'warning'
                       : 'neutral'
                   }
+                  className="flex-shrink-0"
                 >
                   {task.priority}
                 </Badge>

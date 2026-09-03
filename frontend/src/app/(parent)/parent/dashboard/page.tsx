@@ -101,43 +101,41 @@ export default function ParentDashboardPage() {
   return (
     <div className="space-y-6">
       {/* Header with Child Selector & Link Button */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-2xl bg-gradient-to-r from-emerald-950/50 via-slate-900 to-slate-950 border border-emerald-500/20">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white shadow-xl shadow-emerald-500/15 border border-emerald-400/30">
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
               Parent Guardian Portal
             </h1>
-            <Shield className="w-5 h-5 text-emerald-400" />
+            <Shield className="w-5 h-5 text-emerald-200" />
           </div>
-          <p className="text-xs text-slate-300 mt-1">
+          <p className="text-xs text-emerald-100 mt-1">
             Read-only academic supervision, attendance monitoring, and exam performance.
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           {children.length > 0 && (
             <select
               value={selectedChildId}
               onChange={(e) => setSelectedChildId(e.target.value)}
-              className="px-3 py-2 text-xs font-bold rounded-xl border border-emerald-700 bg-slate-900 text-white"
+              className="w-full sm:w-auto px-3 py-2 text-xs font-bold rounded-xl border border-white/30 bg-white/20 text-white backdrop-blur-sm focus:outline-none"
             >
               {children.map((k) => (
-                <option key={k.studentId} value={k.studentId}>
+                <option key={k.studentId} value={k.studentId} className="bg-slate-900 text-white">
                   Viewing: {k.firstName} {k.lastName} ({k.gradeLevel || 'Student'})
                 </option>
               ))}
             </select>
           )}
 
-          <Button
-            variant="primary"
-            size="sm"
+          <button
             onClick={() => setIsLinkOpen(true)}
-            leftIcon={<Plus className="w-3.5 h-3.5" />}
-            className="bg-emerald-600 hover:bg-emerald-700"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold rounded-xl bg-white text-emerald-700 hover:bg-emerald-50 shadow-md transition-all active:scale-[0.98] whitespace-nowrap"
           >
-            Link Student
-          </Button>
+            <Plus className="w-3.5 h-3.5" />
+            <span>Link Student</span>
+          </button>
         </div>
       </div>
 

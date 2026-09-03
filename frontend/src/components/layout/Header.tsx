@@ -55,25 +55,27 @@ export const Header: React.FC<{ onMobileMenuToggle?: () => void }> = ({
         {/* Global Search Trigger */}
         <button
           onClick={() => dispatch(setSearchModalOpen(true))}
-          className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs w-48 sm:w-64 transition-all"
+          className="flex items-center gap-2 p-2 sm:px-3 sm:py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs sm:w-64 transition-all"
+          title="Search subjects, tasks, notes..."
         >
           <Search className="w-3.5 h-3.5 flex-shrink-0" />
-          <span className="truncate">Search subjects, tasks, notes...</span>
+          <span className="hidden sm:inline truncate">Search subjects, tasks, notes...</span>
           <kbd className="hidden sm:inline-block ml-auto px-1.5 py-0.5 text-[10px] font-semibold bg-white dark:bg-slate-700 rounded border border-slate-200 dark:border-slate-600 text-slate-500">
             Ctrl+K
           </kbd>
         </button>
       </div>
 
-      <div className="flex items-center gap-2 sm:gap-3">
+      <div className="flex items-center gap-1.5 sm:gap-3">
         {/* Floating Pomodoro Quick-Pill */}
         {user?.role === 'STUDENT' && (
           <button
             onClick={() => dispatch(setPomodoroModalOpen(true))}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-50 border border-indigo-200/80 text-indigo-700 dark:bg-indigo-950/60 dark:border-indigo-800/80 dark:text-indigo-300 text-xs font-bold transition-transform hover:scale-105"
+            className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-full bg-indigo-50 border border-indigo-200/80 text-indigo-700 dark:bg-indigo-950/60 dark:border-indigo-800/80 dark:text-indigo-300 text-xs font-bold transition-transform hover:scale-105"
+            title="Focus Timer"
           >
-            <Timer className="w-4 h-4 text-indigo-600 dark:text-indigo-400 animate-pulse" />
-            <span>{formatTimer(activePomodoro.timeLeft)}</span>
+            <Timer className="w-4 h-4 text-indigo-600 dark:text-indigo-400 animate-pulse flex-shrink-0" />
+            <span className="text-[11px] sm:text-xs">{formatTimer(activePomodoro.timeLeft)}</span>
           </button>
         )}
 
@@ -112,7 +114,7 @@ export const Header: React.FC<{ onMobileMenuToggle?: () => void }> = ({
           </button>
 
           {showUserMenu && (
-            <div className="absolute right-0 mt-2 w-56 rounded-2xl border border-slate-200 bg-white p-2 shadow-xl dark:border-slate-800 dark:bg-slate-900 animate-in fade-in z-50">
+            <div className="absolute right-0 mt-2 w-56 max-w-[calc(100vw-2rem)] rounded-2xl border border-slate-200 bg-white p-2 shadow-xl dark:border-slate-800 dark:bg-slate-900 animate-in fade-in z-50">
               <div className="px-3 py-2 border-b border-slate-100 dark:border-slate-800">
                 <p className="text-xs font-bold text-slate-900 dark:text-slate-100">
                   {user?.firstName} {user?.lastName}

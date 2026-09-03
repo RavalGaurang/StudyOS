@@ -168,85 +168,80 @@ export default function StudyPage() {
       </div>
 
       {/* Hero: Interactive Pomodoro Desk */}
-      <Card className="p-8 bg-gradient-to-br from-indigo-950/60 via-slate-900 to-slate-950 border-indigo-500/20 text-center flex flex-col items-center">
+      <Card className="p-5 sm:p-8 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-950 border-indigo-500/30 text-center flex flex-col items-center">
         {/* Preset selectors */}
-        <div className="flex items-center gap-2 p-1.5 bg-slate-900/80 border border-slate-800 rounded-2xl mb-8">
+        <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 p-1.5 bg-slate-800/80 border border-slate-700/80 rounded-2xl mb-6 sm:mb-8">
           <button
             onClick={() => handleResetTimer(25, 'WORK')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+            className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all ${
               activePomodoro.mode === 'WORK' && activePomodoro.timeLeft <= 25 * 60
                 ? 'bg-indigo-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-slate-200'
+                : 'text-slate-300 hover:text-white'
             }`}
           >
             25/5 Pomodoro
           </button>
           <button
             onClick={() => handleResetTimer(50, 'WORK')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+            className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all ${
               activePomodoro.mode === 'WORK' && activePomodoro.timeLeft > 25 * 60
                 ? 'bg-indigo-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-slate-200'
+                : 'text-slate-300 hover:text-white'
             }`}
           >
             50/10 Deep Work
           </button>
           <button
             onClick={() => handleResetTimer(5, 'SHORT_BREAK')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+            className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all ${
               activePomodoro.mode === 'SHORT_BREAK'
                 ? 'bg-emerald-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-slate-200'
+                : 'text-slate-300 hover:text-white'
             }`}
           >
             5m Break
           </button>
         </div>
 
-        {/* Huge Digital Clock */}
-        <div className="relative flex items-center justify-center w-64 h-64 rounded-full border-4 border-indigo-500/30 bg-slate-900/90 shadow-2xl mb-8">
+        {/* Responsive Digital Clock */}
+        <div className="relative flex items-center justify-center w-52 h-52 sm:w-64 sm:h-64 rounded-full border-4 border-indigo-500/30 bg-slate-900/90 shadow-2xl mb-6 sm:mb-8">
           <div className="flex flex-col items-center">
-            <span className="text-6xl font-black text-white tracking-tighter tabular-nums">
+            <span className="text-5xl sm:text-6xl font-black text-white tracking-tighter tabular-nums">
               {formatTimer(activePomodoro.timeLeft)}
             </span>
-            <span className="text-xs font-extrabold uppercase tracking-widest text-indigo-400 mt-2">
+            <span className="text-[11px] sm:text-xs font-extrabold uppercase tracking-widest text-indigo-400 mt-2">
               {activePomodoro.mode === 'WORK' ? 'Deep Work Interval' : 'Rest & Recharge'}
             </span>
           </div>
         </div>
 
         {/* Controls */}
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center justify-center gap-3">
           {activePomodoro.isRunning ? (
-            <Button
-              variant="secondary"
-              size="lg"
-              className="px-8 font-bold text-sm"
+            <button
+              className="inline-flex items-center gap-2 px-6 sm:px-8 py-2.5 font-bold text-sm rounded-xl bg-slate-800 hover:bg-slate-700 text-white border border-slate-600 shadow-md transition-all active:scale-[0.98]"
               onClick={handlePause}
-              leftIcon={<Pause className="w-5 h-5" />}
             >
-              Pause Focus
-            </Button>
+              <Pause className="w-5 h-5" />
+              <span>Pause Focus</span>
+            </button>
           ) : (
-            <Button
-              variant="primary"
-              size="lg"
-              className="px-8 font-bold text-sm shadow-xl shadow-indigo-600/30"
+            <button
+              className="inline-flex items-center gap-2 px-6 sm:px-8 py-2.5 font-bold text-sm rounded-xl bg-gradient-to-r from-violet-600 via-indigo-600 to-blue-600 hover:from-violet-500 hover:via-indigo-500 hover:to-blue-500 text-white shadow-xl shadow-indigo-600/30 transition-all active:scale-[0.98]"
               onClick={handleStart}
-              leftIcon={<Play className="w-5 h-5" />}
             >
-              Start Focus Session
-            </Button>
+              <Play className="w-5 h-5 fill-white" />
+              <span>Start Focus Session</span>
+            </button>
           )}
 
-          <Button
-            variant="outline"
-            size="lg"
+          <button
             onClick={() => handleResetTimer(25, 'WORK')}
             title="Reset timer"
+            className="p-2.5 rounded-xl border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-slate-200 hover:text-white transition-all active:scale-[0.98]"
           >
             <RotateCcw className="w-5 h-5" />
-          </Button>
+          </button>
         </div>
       </Card>
 

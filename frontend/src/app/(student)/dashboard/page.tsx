@@ -87,111 +87,111 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       {/* 1. Welcome Banner & Quick Action Buttons */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 rounded-2xl bg-gradient-to-r from-indigo-900/40 via-purple-900/30 to-slate-900 border border-indigo-500/20 backdrop-blur-md">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-violet-700 text-white shadow-xl shadow-indigo-500/15 border border-indigo-400/30">
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
               Welcome back, {user?.firstName}!
             </h1>
-            <Sparkles className="w-5 h-5 text-indigo-400 animate-pulse" />
+            <Sparkles className="w-5 h-5 text-amber-300 animate-pulse" />
           </div>
-          <p className="text-xs sm:text-sm text-slate-300 mt-1">
+          <p className="text-xs sm:text-sm text-indigo-100 mt-1">
             You&apos;re on track with a {summary.taskCompletionRate}% task completion rate this week.
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
-          <Button
-            variant="primary"
-            size="sm"
+        <div className="flex flex-wrap items-center gap-2.5">
+          <button
             onClick={() => dispatch(setPomodoroModalOpen(true))}
-            leftIcon={<Play className="w-3.5 h-3.5" />}
-            className="shadow-lg shadow-indigo-500/25"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold rounded-xl bg-white text-indigo-700 hover:bg-indigo-50 shadow-md transition-all active:scale-[0.98]"
           >
-            Start Focus Timer
-          </Button>
+            <Play className="w-3.5 h-3.5 fill-indigo-700 text-indigo-700" />
+            <span>Start Focus Timer</span>
+          </button>
 
           <Link href="/tasks">
-            <Button variant="secondary" size="sm" leftIcon={<Plus className="w-3.5 h-3.5" />}>
-              Add Task
-            </Button>
+            <button className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold rounded-xl bg-white/20 hover:bg-white/30 text-white border border-white/25 backdrop-blur-sm transition-all active:scale-[0.98]">
+              <Plus className="w-3.5 h-3.5" />
+              <span>Add Task</span>
+            </button>
           </Link>
 
           <Link href="/notes">
-            <Button variant="outline" size="sm" leftIcon={<BookMarked className="w-3.5 h-3.5" />}>
-              New Note
-            </Button>
+            <button className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-sm transition-all active:scale-[0.98]">
+              <BookMarked className="w-3.5 h-3.5" />
+              <span>New Note</span>
+            </button>
           </Link>
         </div>
       </div>
 
       {/* 2. Top Metric KPI Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="border-l-4 border-l-indigo-500">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <Card className="p-3.5 sm:p-5 border-l-4 border-l-indigo-500">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">
+            <span className="text-[11px] sm:text-xs font-bold uppercase text-slate-500 dark:text-slate-400">
               Study Time (Week)
             </span>
-            <div className="p-2 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400">
+            <div className="p-1.5 sm:p-2 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400">
               <Timer className="w-4 h-4" />
             </div>
           </div>
-          <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl font-black text-slate-900 dark:text-slate-100">
+          <div className="mt-2 flex flex-wrap items-baseline gap-1.5">
+            <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-slate-100">
               {summary.weeklyStudyHours}h
             </span>
-            <span className="text-xs text-slate-400">({summary.monthlyStudyHours}h this month)</span>
+            <span className="text-[10px] sm:text-xs text-slate-400">({summary.monthlyStudyHours}h month)</span>
           </div>
         </Card>
 
-        <Card className="border-l-4 border-l-emerald-500">
+        <Card className="p-3.5 sm:p-5 border-l-4 border-l-emerald-500">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">
+            <span className="text-[11px] sm:text-xs font-bold uppercase text-slate-500 dark:text-slate-400">
               Attendance
             </span>
-            <div className="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400">
+            <div className="p-1.5 sm:p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400">
               <Clock className="w-4 h-4" />
             </div>
           </div>
-          <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl font-black text-slate-900 dark:text-slate-100">
+          <div className="mt-2 flex flex-wrap items-baseline gap-1.5">
+            <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-slate-100">
               {summary.attendancePercentage}%
             </span>
-            <span className="text-xs text-emerald-500 font-semibold">Healthy</span>
+            <span className="text-[10px] sm:text-xs text-emerald-500 font-semibold">Healthy</span>
           </div>
         </Card>
 
-        <Card className="border-l-4 border-l-purple-500">
+        <Card className="p-3.5 sm:p-5 border-l-4 border-l-purple-500">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">
+            <span className="text-[11px] sm:text-xs font-bold uppercase text-slate-500 dark:text-slate-400">
               Pending Tasks
             </span>
-            <div className="p-2 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400">
+            <div className="p-1.5 sm:p-2 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400">
               <CheckSquare className="w-4 h-4" />
             </div>
           </div>
-          <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl font-black text-slate-900 dark:text-slate-100">
+          <div className="mt-2 flex flex-wrap items-baseline gap-1.5">
+            <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-slate-100">
               {summary.pendingTasksCount}
             </span>
-            <span className="text-xs text-slate-400">({summary.completedTasksCount} done)</span>
+            <span className="text-[10px] sm:text-xs text-slate-400">({summary.completedTasksCount} done)</span>
           </div>
         </Card>
 
-        <Card className="border-l-4 border-l-amber-500">
+        <Card className="p-3.5 sm:p-5 border-l-4 border-l-amber-500">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">
+            <span className="text-[11px] sm:text-xs font-bold uppercase text-slate-500 dark:text-slate-400">
               Upcoming Exams
             </span>
-            <div className="p-2 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400">
+            <div className="p-1.5 sm:p-2 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400">
               <GraduationCap className="w-4 h-4" />
             </div>
           </div>
-          <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl font-black text-slate-900 dark:text-slate-100">
+          <div className="mt-2 flex flex-wrap items-baseline gap-1.5">
+            <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-slate-100">
               {summary.upcomingExamsCount}
             </span>
-            <span className="text-xs text-slate-400">Next 30 days</span>
+            <span className="text-[10px] sm:text-xs text-slate-400">Next 30 days</span>
           </div>
         </Card>
       </div>
@@ -275,6 +275,7 @@ export default function DashboardPage() {
                           ? 'warning'
                           : 'neutral'
                       }
+                      className="flex-shrink-0"
                     >
                       {t.priority}
                     </Badge>

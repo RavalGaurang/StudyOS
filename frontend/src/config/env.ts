@@ -48,7 +48,7 @@ export const env = {
   appEnv: parsedEnv.data.NEXT_PUBLIC_APP_ENV,
   apiUrl: parsedEnv.data.NEXT_PUBLIC_API_URL.replace(/\/+$/, ''),
   appName: parsedEnv.data.NEXT_PUBLIC_APP_NAME,
-  appUrl: parsedEnv.data.NEXT_PUBLIC_APP_URL || (typeof window !== 'undefined' ? window.location.origin : 'https://study-raval-gauarngs-projects.vercel.app'),
+  appUrl: parsedEnv.data.NEXT_PUBLIC_APP_URL || (typeof window !== 'undefined' ? window.location.origin : 'https://study-os-raval-gauarngs-projects.vercel.app'),
   isDevelopment: parsedEnv.data.NEXT_PUBLIC_APP_ENV === 'development',
   isProduction: parsedEnv.data.NEXT_PUBLIC_APP_ENV === 'production',
   isTest: parsedEnv.data.NEXT_PUBLIC_APP_ENV === 'test',

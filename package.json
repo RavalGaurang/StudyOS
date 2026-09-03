@@ -45,7 +45,13 @@
   "author": "StudyOS Team",
   "license": "MIT",
   "devDependencies": {
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.5",
     "cross-env": "^7.0.3",
     "dotenv-cli": "^7.4.4"
+  },
+  "overrides": {
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.5"
   }
 }

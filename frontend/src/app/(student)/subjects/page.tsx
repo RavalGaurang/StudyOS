@@ -39,7 +39,7 @@ export default function SubjectsPage() {
     reset,
     formState: { isSubmitting },
   } = useForm<SubjectFormValues>({
-    resolver: zodResolver(subjectSchema),
+    resolver: zodResolver(subjectSchema) as any,
     defaultValues: {
       name: '',
       code: '',

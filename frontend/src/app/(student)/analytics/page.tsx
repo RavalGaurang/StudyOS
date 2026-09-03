@@ -140,7 +140,7 @@ export default function AnalyticsPage() {
                     cx="50%"
                     cy="50%"
                     outerRadius={80}
-                    label={({ name, hours }) => `${name} (${hours}h)`}
+                    label={(entry: any) => `${entry.name} (${entry.hours ?? entry.value}h)`}
                   >
                     {data.subjectStudyDistribution.map((entry, index) => (
                       <Cell

@@ -42,7 +42,7 @@ export default function TimetablePage() {
     reset,
     formState: { isSubmitting },
   } = useForm<TimetableFormValues>({
-    resolver: zodResolver(timetableSchema),
+    resolver: zodResolver(timetableSchema) as any,
     defaultValues: {
       title: '',
       subjectId: '',

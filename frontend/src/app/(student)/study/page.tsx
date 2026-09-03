@@ -58,7 +58,7 @@ export default function StudyPage() {
     reset,
     formState: { isSubmitting },
   } = useForm<ManualSessionValues>({
-    resolver: zodResolver(manualSessionSchema),
+    resolver: zodResolver(manualSessionSchema) as any,
     defaultValues: {
       subjectId: '',
       durationMinutes: 45,

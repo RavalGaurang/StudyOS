@@ -1,4 +1,4 @@
-﻿import { z } from 'zod';
+import { z } from 'zod';
 
 /**
  * Zod Schema for Client-Side & Build Environment Variables.
@@ -10,9 +10,8 @@ const envSchema = z.object({
     .enum(['development', 'production', 'test'])
     .default('development'),
   NEXT_PUBLIC_API_URL: z
-    .string({
-      required_error: 'NEXT_PUBLIC_API_URL is required',
-    })
+    .string()
+    .min(1, 'NEXT_PUBLIC_API_URL is required')
     .url('NEXT_PUBLIC_API_URL must be a valid URL (e.g. http://localhost:5000/api/v1 or https://your-backend.com/api/v1)'),
   NEXT_PUBLIC_APP_NAME: z
     .string()

@@ -44,7 +44,7 @@ export default function NotesPage() {
     reset,
     formState: { isSubmitting },
   } = useForm<NoteFormValues>({
-    resolver: zodResolver(noteSchema),
+    resolver: zodResolver(noteSchema) as any,
     defaultValues: {
       title: '',
       subjectId: '',

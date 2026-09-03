@@ -63,7 +63,7 @@ export default function TasksPage() {
     reset,
     formState: { isSubmitting },
   } = useForm<TaskFormValues>({
-    resolver: zodResolver(taskFormSchema),
+    resolver: zodResolver(taskFormSchema) as any,
     defaultValues: {
       title: '',
       description: '',

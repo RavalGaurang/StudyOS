@@ -46,7 +46,7 @@ export default function ExamsPage() {
     reset,
     formState: { isSubmitting },
   } = useForm<ExamFormValues>({
-    resolver: zodResolver(examSchema),
+    resolver: zodResolver(examSchema) as any,
     defaultValues: {
       title: '',
       subjectId: '',

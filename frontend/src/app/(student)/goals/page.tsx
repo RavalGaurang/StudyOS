@@ -40,7 +40,7 @@ export default function GoalsPage() {
     reset,
     formState: { isSubmitting },
   } = useForm<GoalFormValues>({
-    resolver: zodResolver(goalSchema),
+    resolver: zodResolver(goalSchema) as any,
     defaultValues: {
       title: '',
       description: '',

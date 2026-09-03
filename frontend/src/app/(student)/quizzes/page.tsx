@@ -44,7 +44,7 @@ export default function QuizzesPage() {
     reset,
     formState: { isSubmitting },
   } = useForm<CreateQuizFormValues>({
-    resolver: zodResolver(createQuizSchema),
+    resolver: zodResolver(createQuizSchema) as any,
     defaultValues: {
       title: '',
       subjectId: '',

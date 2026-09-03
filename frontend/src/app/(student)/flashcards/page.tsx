@@ -46,12 +46,12 @@ export default function FlashcardsPage() {
   const [isAddCardOpen, setIsAddCardOpen] = useState(false);
 
   const deckForm = useForm<DeckFormValues>({
-    resolver: zodResolver(deckSchema),
+    resolver: zodResolver(deckSchema) as any,
     defaultValues: { title: '', description: '', subjectId: '' },
   });
 
   const cardForm = useForm<CardFormValues>({
-    resolver: zodResolver(cardSchema),
+    resolver: zodResolver(cardSchema) as any,
     defaultValues: { front: '', back: '' },
   });
 

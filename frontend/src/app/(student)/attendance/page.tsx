@@ -40,7 +40,7 @@ export default function AttendancePage() {
     reset,
     formState: { isSubmitting },
   } = useForm<AttendanceFormValues>({
-    resolver: zodResolver(attendanceSchema),
+    resolver: zodResolver(attendanceSchema) as any,
     defaultValues: {
       subjectId: '',
       date: new Date().toISOString().split('T')[0],

@@ -40,7 +40,7 @@ export default function ParentDashboardPage() {
     reset,
     formState: { isSubmitting },
   } = useForm<LinkFormValues>({
-    resolver: zodResolver(linkSchema),
+    resolver: zodResolver(linkSchema) as any,
     defaultValues: {
       studentEmail: '',
       relationship: 'Father',

@@ -111,7 +111,7 @@ export const SearchModal: React.FC = () => {
             <p className="text-center text-xs text-slate-400 py-8">Searching across StudyOS...</p>
           ) : query && totalResults === 0 ? (
             <p className="text-center text-xs text-slate-400 py-8">
-              No results found for "{query}"
+              No results found for &quot;{query}&quot;
             </p>
           ) : !query ? (
             <div className="text-center py-8">

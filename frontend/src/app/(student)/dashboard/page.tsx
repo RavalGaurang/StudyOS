@@ -96,7 +96,7 @@ export default function DashboardPage() {
             <Sparkles className="w-5 h-5 text-indigo-400 animate-pulse" />
           </div>
           <p className="text-xs sm:text-sm text-slate-300 mt-1">
-            You're on track with a {summary.taskCompletionRate}% task completion rate this week.
+            You&apos;re on track with a {summary.taskCompletionRate}% task completion rate this week.
           </p>
         </div>
 

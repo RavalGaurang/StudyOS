@@ -1,45 +1,8 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
-
-/**
- * Intelligent Production & Local API Base URL Resolver
- * 
- * Rules:
- * 1. When running on a remote/production hostname (e.g. *.vercel.app, *.onrender.com, custom domain):
- *    - Never allow localhost URLs.
- *    - Automatically use the live Render production API: https://studyos-5r51.onrender.com/api/v1
- * 2. When running locally (localhost / 127.0.0.1):
- *    - Use NEXT_PUBLIC_API_URL or fallback to http://localhost:5000/api/v1
- */
-export function getApiBaseUrl(): string {
-  if (typeof window !== 'undefined') {
-    const hostname = window.location.hostname;
-    const isLocalhost =
-      hostname === 'localhost' ||
-      hostname === '127.0.0.1' ||
-      hostname === '0.0.0.0' ||
-      hostname.startsWith('192.168.') ||
-      hostname.startsWith('10.');
-
-    if (!isLocalhost) {
-      const configuredUrl = process.env.NEXT_PUBLIC_API_URL;
-      if (configuredUrl && !configuredUrl.includes('localhost') && !configuredUrl.includes('127.0.0.1')) {
-        return configuredUrl.replace(/\/+$/, '');
-      }
-      // Production fallback to live Render backend
-      return 'https://studyos-5r51.onrender.com/api/v1';
-    }
-  }
-
-  const envUrl = process.env.NEXT_PUBLIC_API_URL;
-  if (process.env.NODE_ENV === 'production' && (!envUrl || envUrl.includes('localhost'))) {
-    return 'https://studyos-5r51.onrender.com/api/v1';
-  }
-
-  return (envUrl || 'http://localhost:5000/api/v1').replace(/\/+$/, '');
-}
+import { env } from '@/config/env';
 
 export const apiClient = axios.create({
-  baseURL: getApiBaseUrl(),
+  baseURL: env.apiUrl,
   withCredentials: true,
   timeout: 60000,
   headers: {
@@ -68,11 +31,9 @@ export function getAccessToken(): string | null {
   return inMemoryToken;
 }
 
-// Interceptor Request: Dynamically set Base URL and attach Bearer Token
+// Interceptor Request: Attach Bearer Token
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    config.baseURL = getApiBaseUrl();
-
     const token = getAccessToken();
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -122,7 +83,6 @@ apiClient.interceptors.response.use(
             if (originalRequest.headers) {
               originalRequest.headers.Authorization = `Bearer ${token}`;
             }
-            originalRequest.baseURL = getApiBaseUrl();
             return apiClient(originalRequest);
           })
           .catch((err) => Promise.reject(err));
@@ -132,9 +92,8 @@ apiClient.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const currentBaseUrl = getApiBaseUrl();
         const refreshResponse = await axios.post(
-          `${currentBaseUrl}/auth/refresh`,
+          `${env.apiUrl}/auth/refresh`,
           {},
           { withCredentials: true }
         );
@@ -145,7 +104,6 @@ apiClient.interceptors.response.use(
           if (originalRequest.headers) {
             originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
           }
-          originalRequest.baseURL = currentBaseUrl;
           processQueue(null, newAccessToken);
           return apiClient(originalRequest);
         } else {

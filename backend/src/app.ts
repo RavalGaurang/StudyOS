@@ -35,6 +35,7 @@ export function createApp(): Express {
         return callback(null, true);
       },
       credentials: true,
+      maxAge: 86400, // Cache preflight for 24 hours to eliminate duplicate preflight OPTIONS calls
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
       allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
     })

@@ -140,8 +140,8 @@ export default function TasksPage() {
       setIsCreateOpen(false);
       reset();
       loadTasks();
-    } catch (err: any) {
-      alert(err.response?.data?.message || 'Error creating task');
+    } catch {
+      // Error is caught and displayed by the global toast interceptor
     }
   };
 
@@ -354,6 +354,7 @@ export default function TasksPage() {
           <FormInput
             name="title"
             label="Task Title"
+            required
             placeholder="e.g. Complete BCNF problem set 4"
             control={control}
           />

@@ -14,7 +14,6 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { GraduationCap, Users, Shield, UserCheck, ArrowRight, Lock, Mail } from 'lucide-react';
 import { APP_ROUTES, USER_ROLES } from '@/enums/app.enum';
-import { getApiErrorMessage } from '@/lib/api/apiService';
 
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid email address').toLowerCase(),
@@ -26,7 +25,6 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 export default function LoginPage() {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const [serverError, setServerError] = useState<string | null>(null);
 
   const {
     control,
@@ -42,7 +40,6 @@ export default function LoginPage() {
   });
 
   const onSubmit = async (values: LoginFormValues) => {
-    setServerError(null);
     try {
       const result = await authService.login(values);
       // Updates Redux and stores token in secure cookies
@@ -56,8 +53,8 @@ export default function LoginPage() {
       } else {
         router.push(APP_ROUTES.DASHBOARD);
       }
-    } catch (err: any) {
-      setServerError(getApiErrorMessage(err));
+    } catch {
+      // Error notification is handled by the global toast interceptor
     }
   };
 
@@ -89,17 +86,12 @@ export default function LoginPage() {
 
       <div className="mt-6 sm:mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <Card className="bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 p-5 sm:p-8 shadow-xl">
-          {serverError && (
-            <div className="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold">
-              {serverError}
-            </div>
-          )}
-
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <FormInput
               name="email"
               label="Email Address"
               type="email"
+              required
               placeholder="student@studyos.com"
               control={control}
               leftElement={<Mail className="w-4 h-4 text-slate-400" />}
@@ -109,6 +101,7 @@ export default function LoginPage() {
               name="password"
               label="Password"
               type="password"
+              required
               placeholder="••••••••••••"
               control={control}
               leftElement={<Lock className="w-4 h-4 text-slate-400" />}

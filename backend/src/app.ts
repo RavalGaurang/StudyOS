@@ -85,8 +85,9 @@ export function createApp(): Express {
   app.get('/health', healthCheckHandler);
   app.get('/api/v1/health', healthCheckHandler);
 
-  // 8. API v1 Mount Point
+  // 8. API Mount Points (supports /api/v1 and direct /api)
   app.use('/api/v1', v1Routes);
+  app.use('/api', v1Routes);
 
   // 9. Unhandled 404 Route Catch
   app.use((req: Request, res: Response, next: NextFunction) => {

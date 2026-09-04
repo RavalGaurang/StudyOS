@@ -85,8 +85,8 @@ export default function TimetablePage() {
       setIsCreateOpen(false);
       reset();
       loadData();
-    } catch (err: any) {
-      alert(err.response?.data?.message || 'Error saving event');
+    } catch {
+      // Error is caught and displayed by the global toast interceptor
     }
   };
 
@@ -244,6 +244,7 @@ export default function TimetablePage() {
           <FormInput
             name="title"
             label="Class / Session Title"
+            required
             placeholder="e.g. Operating Systems Lecture"
             control={control}
           />
@@ -258,6 +259,7 @@ export default function TimetablePage() {
           <FormSelect
             name="dayOfWeek"
             label="Day of Week"
+            required
             options={[
               { value: 1, label: 'Monday' },
               { value: 2, label: 'Tuesday' },
@@ -274,6 +276,7 @@ export default function TimetablePage() {
             <FormInput
               name="startTime"
               label="Start Time (HH:mm)"
+              required
               placeholder="09:00"
               control={control}
             />
@@ -281,6 +284,7 @@ export default function TimetablePage() {
             <FormInput
               name="endTime"
               label="End Time (HH:mm)"
+              required
               placeholder="10:30"
               control={control}
             />

@@ -75,8 +75,8 @@ export default function AttendancePage() {
       setIsRecordOpen(false);
       reset();
       loadData();
-    } catch (err: any) {
-      alert(err.response?.data?.message || 'Error recording attendance');
+    } catch {
+      // Error is caught and displayed by the global toast interceptor
     }
   };
 
@@ -296,6 +296,7 @@ export default function AttendancePage() {
           <FormSelect
             name="subjectId"
             label="Subject"
+            required
             options={subjectOptions}
             control={control}
           />
@@ -304,12 +305,14 @@ export default function AttendancePage() {
             name="date"
             label="Class Date"
             type="date"
+            required
             control={control}
           />
 
           <FormSelect
             name="status"
             label="Attendance Status"
+            required
             options={[
               { value: 'PRESENT', label: 'Present (Attended)' },
               { value: 'ABSENT', label: 'Absent' },

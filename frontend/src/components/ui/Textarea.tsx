@@ -1,26 +1,34 @@
 import React, { TextareaHTMLAttributes } from 'react';
 import { cn } from '../../lib/utils';
+import { Label } from './Label';
 
 export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
-  label?: string;
+  label?: React.ReactNode;
+  isRequired?: boolean;
   error?: string;
   helperText?: string;
 }
 
 export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className, label, error, helperText, id, ...props }, ref) => {
-    const inputId = id || (label ? label.toLowerCase().replace(/\s+/g, '-') : undefined);
+  ({ className, label, error, helperText, id, required, isRequired, ...props }, ref) => {
+    const isFieldRequired = Boolean(required || isRequired);
+    const inputId =
+      id ||
+      (typeof label === 'string'
+        ? label.replace(/[*:]/g, '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '-')
+        : undefined);
 
     return (
       <div className="w-full space-y-1.5">
         {label && (
-          <label htmlFor={inputId} className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+          <Label htmlFor={inputId} required={isFieldRequired}>
             {label}
-          </label>
+          </Label>
         )}
         <textarea
           ref={ref}
           id={inputId}
+          required={isFieldRequired}
           className={cn(
             'w-full px-3 py-2 text-sm rounded-lg border bg-white text-slate-900 placeholder-slate-400 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 disabled:bg-slate-50 disabled:text-slate-500 dark:bg-slate-900 dark:border-slate-700 dark:text-slate-100 dark:placeholder-slate-500',
             error

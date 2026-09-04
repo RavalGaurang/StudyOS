@@ -18,6 +18,7 @@ import { z } from 'zod';
 import { Users, Plus, Timer, Clock, GraduationCap, FileText, CheckCircle2, Shield } from 'lucide-react';
 import { formatDate, getDaysRemaining } from '../../../../lib/utils';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts';
+import { toast } from '@/hooks/useToast';
 
 const linkSchema = z.object({
   studentEmail: z.string().email('Valid student email required').toLowerCase(),
@@ -88,9 +89,9 @@ export default function ParentDashboardPage() {
       setIsLinkOpen(false);
       reset();
       loadChildren();
-      alert('Student linked successfully!');
-    } catch (err: any) {
-      alert(err.response?.data?.message || 'Error linking student');
+      toast.success('Student linked successfully!');
+    } catch {
+      // API error is automatically shown by global toast interceptor
     }
   };
 
@@ -320,12 +321,14 @@ export default function ParentDashboardPage() {
             name="studentEmail"
             label="Student's Registered Email"
             placeholder="student@studyos.com"
+            required
             control={control}
           />
 
           <FormSelect
             name="relationship"
             label="Relationship"
+            required
             options={[
               { value: 'Father', label: 'Father' },
               { value: 'Mother', label: 'Mother' },

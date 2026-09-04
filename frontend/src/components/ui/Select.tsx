@@ -3,6 +3,7 @@
 import React from 'react';
 import ReactSelect, { StylesConfig, Props as ReactSelectProps } from 'react-select';
 import { cn } from '../../lib/utils';
+import { Label } from './Label';
 
 export interface SelectOption {
   value: string | number;
@@ -12,7 +13,9 @@ export interface SelectOption {
 export interface SelectProps {
   name?: string;
   id?: string;
-  label?: string;
+  label?: React.ReactNode;
+  required?: boolean;
+  isRequired?: boolean;
   error?: string;
   helperText?: string;
   options: SelectOption[];
@@ -34,6 +37,8 @@ export const Select = React.forwardRef<any, SelectProps>(
       name,
       id,
       label,
+      required,
+      isRequired,
       error,
       helperText,
       options,
@@ -50,7 +55,12 @@ export const Select = React.forwardRef<any, SelectProps>(
     },
     ref
   ) => {
-    const inputId = id || (label ? label.toLowerCase().replace(/\s+/g, '-') : undefined);
+    const isFieldRequired = Boolean(required || isRequired);
+    const inputId =
+      id ||
+      (typeof label === 'string'
+        ? label.replace(/[*:]/g, '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '-')
+        : undefined);
 
     // Map string/number value to SelectOption object
     const getOptionFromValue = (val: any) => {
@@ -163,9 +173,9 @@ export const Select = React.forwardRef<any, SelectProps>(
     return (
       <div className={cn('w-full space-y-1.5 studyos-select-container', className)}>
         {label && (
-          <label htmlFor={inputId} className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+          <Label htmlFor={inputId} required={isFieldRequired}>
             {label}
-          </label>
+          </Label>
         )}
         <div className="relative">
           <ReactSelect

@@ -146,7 +146,10 @@ export function middleware(request: NextRequest) {
   }
 
   // Role-based route authorization guards:
-  if (pathname.startsWith('/admin') && userRole !== USER_ROLES.ADMIN) {
+  if (
+    (pathname.startsWith('/admin') || pathname.startsWith('/users')) &&
+    userRole !== USER_ROLES.ADMIN
+  ) {
     return NextResponse.redirect(new URL(targetDashboard, request.url));
   }
 

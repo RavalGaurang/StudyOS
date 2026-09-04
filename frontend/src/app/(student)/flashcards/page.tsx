@@ -114,8 +114,8 @@ export default function FlashcardsPage() {
       setIsCreateDeckOpen(false);
       deckForm.reset();
       loadData();
-    } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to create deck');
+    } catch {
+      // Error is caught and displayed by the global toast interceptor
     }
   };
 
@@ -126,8 +126,8 @@ export default function FlashcardsPage() {
       setIsAddCardOpen(false);
       cardForm.reset();
       handleOpenDeck(selectedDeck.id);
-    } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to add card');
+    } catch {
+      // Error is caught and displayed by the global toast interceptor
     }
   };
 
@@ -298,12 +298,14 @@ export default function FlashcardsPage() {
           <FormInput
             name="title"
             label="Deck Title"
+            required
             placeholder="e.g. DBMS Normalization Rules"
             control={deckForm.control}
           />
           <FormSelect
             name="subjectId"
             label="Subject"
+            required
             options={subjectOptions}
             control={deckForm.control}
           />
@@ -335,12 +337,14 @@ export default function FlashcardsPage() {
           <FormTextarea
             name="front"
             label="Front Side (Prompt / Question)"
+            required
             placeholder="e.g. What is Boyce-Codd Normal Form (BCNF)?"
             control={cardForm.control}
           />
           <FormTextarea
             name="back"
             label="Back Side (Answer / Key Explanation)"
+            required
             placeholder="e.g. In BCNF, for every functional dependency X -> Y, X must strictly be a Super Key."
             control={cardForm.control}
           />

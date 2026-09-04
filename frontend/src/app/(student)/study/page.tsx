@@ -125,8 +125,8 @@ export default function StudyPage() {
       setIsManualOpen(false);
       reset();
       loadData();
-    } catch (err: any) {
-      alert(err.response?.data?.message || 'Error recording session');
+    } catch {
+      // Error is caught and displayed by the global toast interceptor
     }
   };
 
@@ -330,6 +330,7 @@ export default function StudyPage() {
           <FormSelect
             name="subjectId"
             label="Subject"
+            required
             options={subjectOptions}
             control={control}
           />
@@ -338,12 +339,14 @@ export default function StudyPage() {
             name="durationMinutes"
             label="Duration (Minutes)"
             type="number"
+            required
             control={control}
           />
 
           <FormSelect
             name="sessionType"
             label="Session Type"
+            required
             options={[
               { value: 'CUSTOM', label: 'Custom Study Session' },
               { value: 'POMODORO_25_5', label: '25m Pomodoro' },

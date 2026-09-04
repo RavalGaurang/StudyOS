@@ -15,7 +15,6 @@ import { Button } from '../../../components/ui/Button';
 import { Card } from '../../../components/ui/Card';
 import { ArrowRight, Lock, Mail, User, School } from 'lucide-react';
 import { APP_ROUTES, USER_ROLES } from '@/enums/app.enum';
-import { getApiErrorMessage } from '@/lib/api/apiService';
 
 const registerSchema = z.object({
   email: z.string().email('Please enter a valid email address').toLowerCase(),
@@ -36,7 +35,6 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 export default function RegisterPage() {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const [serverError, setServerError] = useState<string | null>(null);
 
   const {
     control,
@@ -59,7 +57,6 @@ export default function RegisterPage() {
   const selectedRole = watch('role');
 
   const onSubmit = async (values: RegisterFormValues) => {
-    setServerError(null);
     try {
       const result = await authService.register(values);
       dispatch(setCredentials(result));
@@ -69,8 +66,8 @@ export default function RegisterPage() {
       } else {
         router.push(APP_ROUTES.DASHBOARD);
       }
-    } catch (err: any) {
-      setServerError(getApiErrorMessage(err));
+    } catch {
+      // Error notification is handled by the global toast interceptor
     }
   };
 
@@ -97,18 +94,13 @@ export default function RegisterPage() {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <Card className="bg-white border-slate-200 p-6 sm:p-8 shadow-xl shadow-indigo-100/50">
-          {serverError && (
-            <div className="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold">
-              {serverError}
-            </div>
-          )}
-
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="grid grid-cols-2 gap-3">
               <FormInput
                 name="firstName"
                 label="First Name"
                 placeholder="Rahul"
+                required
                 control={control}
                 leftElement={<User className="w-4 h-4 text-slate-400" />}
               />
@@ -116,6 +108,7 @@ export default function RegisterPage() {
                 name="lastName"
                 label="Last Name"
                 placeholder="Sharma"
+                required
                 control={control}
               />
             </div>
@@ -125,6 +118,7 @@ export default function RegisterPage() {
               label="Email Address"
               type="email"
               placeholder="rahul@example.com"
+              required
               control={control}
               leftElement={<Mail className="w-4 h-4 text-slate-400" />}
             />
@@ -134,6 +128,7 @@ export default function RegisterPage() {
               label="Password (min 8 chars, 1 uppercase, 1 number)"
               type="password"
               placeholder="••••••••••••"
+              required
               control={control}
               leftElement={<Lock className="w-4 h-4 text-slate-400" />}
             />
@@ -141,6 +136,7 @@ export default function RegisterPage() {
             <FormSelect
               name="role"
               label="Account Role"
+              required
               control={control}
               options={[
                 { value: 'STUDENT', label: 'Student (Personal Academic OS)' },

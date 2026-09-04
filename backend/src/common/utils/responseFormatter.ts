@@ -13,6 +13,7 @@ export interface ApiResponse<T = any> {
   message: string;
   data?: T;
   meta?: PaginationMeta;
+  pagination?: PaginationMeta;
   errors?: ValidationErrorDetail[];
 }
 
@@ -27,7 +28,7 @@ export function sendSuccess<T>(
     success: true,
     message,
     ...(data !== undefined && { data }),
-    ...(meta !== undefined && { meta }),
+    ...(meta !== undefined && { meta, pagination: meta }),
   };
   return res.status(statusCode).json(payload);
 }

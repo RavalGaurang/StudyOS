@@ -307,6 +307,7 @@ export default function SubjectDetailPage() {
           <FormInput
             name="title"
             label="Unit Title"
+            required
             placeholder="e.g. Transactions & Concurrency Control"
             control={unitForm.control}
           />
@@ -338,6 +339,7 @@ export default function SubjectDetailPage() {
           <FormInput
             name="title"
             label="Topic Name"
+            required
             placeholder="e.g. Two-Phase Locking Protocol (2PL)"
             control={topicForm.control}
           />

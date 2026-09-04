@@ -84,8 +84,8 @@ export default function TakeQuizPage() {
       });
 
       setAttemptResult(res);
-    } catch (err: any) {
-      alert(err.response?.data?.message || 'Error submitting quiz');
+    } catch {
+      // Error is caught and displayed by the global toast interceptor
     } finally {
       setSubmitting(false);
     }

@@ -104,6 +104,13 @@ export const ACTION_CONFIG = {
     USERS: '/admin/users',
     USER_ROLE: (userId: string) => `/admin/users/${userId}/role`,
   },
+
+  // User Management Endpoints
+  USERS: {
+    BASE: '/users',
+    BY_ID: (id: string) => `/users/${id}`,
+    STATUS: (id: string) => `/users/${id}/status`,
+  },
 } as const;
 
 // Alias export for intuitive imports

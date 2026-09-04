@@ -84,8 +84,8 @@ export default function AssignmentsPage() {
       setIsCreateOpen(false);
       reset();
       loadData();
-    } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to save assignment');
+    } catch {
+      // Error is caught and displayed by the global toast interceptor
     }
   };
 
@@ -222,6 +222,7 @@ export default function AssignmentsPage() {
           <FormInput
             name="title"
             label="Assignment Title"
+            required
             placeholder="e.g. Distributed System Consensus Project"
             control={control}
           />
@@ -229,6 +230,7 @@ export default function AssignmentsPage() {
           <FormSelect
             name="subjectId"
             label="Subject"
+            required
             options={subjectOptions}
             control={control}
           />
@@ -245,6 +247,7 @@ export default function AssignmentsPage() {
               name="dueDate"
               label="Due Date"
               type="date"
+              required
               control={control}
             />
 
@@ -252,6 +255,7 @@ export default function AssignmentsPage() {
               name="maxMarks"
               label="Maximum Marks"
               type="number"
+              required
               control={control}
             />
           </div>
@@ -259,6 +263,7 @@ export default function AssignmentsPage() {
           <FormSelect
             name="status"
             label="Current Status"
+            required
             options={[
               { value: 'PENDING', label: 'Pending' },
               { value: 'IN_PROGRESS', label: 'In Progress' },

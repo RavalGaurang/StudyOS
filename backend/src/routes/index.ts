@@ -13,11 +13,13 @@ import { notificationRoutes } from '../modules/notifications/notification.routes
 import { analyticsRoutes } from '../modules/analytics/analytics.routes';
 import { parentRoutes } from '../modules/parents/parent.routes';
 import { adminRoutes } from '../modules/admin/admin.routes';
+import { userRoutes } from '../modules/users/user.routes';
 import { aiRoutes } from '../modules/ai/ai.routes';
 
 const router = Router();
 
 router.use('/auth', authRoutes);
+router.use('/users', userRoutes);
 router.use('/subjects', subjectRoutes);
 router.use('/tasks', taskRoutes);
 router.use('/assignments', assignmentRoutes);

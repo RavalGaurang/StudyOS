@@ -10,5 +10,6 @@ export interface ApiResponse<T = any> {
   message: string;
   data?: T;
   meta?: PaginationMeta;
+  pagination?: PaginationMeta;
   errors?: { field: string; message: string }[];
 }

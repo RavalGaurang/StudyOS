@@ -3,11 +3,12 @@ import axios, {
   AxiosRequestConfig,
   AxiosResponse,
   InternalAxiosRequestConfig,
-} from 'axios';
-import { env } from '@/config/env';
-import { ACTION_CONFIG } from '@/config/action.config';
-import { authCookies } from '@/utils/cookieUtils';
-import { STORAGE_KEYS } from '@/enums/app.enum';
+} from "axios";
+import { env } from "@/config/env";
+import { ACTION_CONFIG } from "@/config/action.config";
+import { authCookies } from "@/utils/cookieUtils";
+import { STORAGE_KEYS } from "@/enums/app.enum";
+import { toast } from "@/hooks/useToast";
 
 /**
  * Reusable Base Axios Instance
@@ -18,7 +19,7 @@ export const apiClient = axios.create({
   withCredentials: true,
   timeout: 60000,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
@@ -31,13 +32,13 @@ const inFlightGetRequests = new Map<string, Promise<any>>();
 const originalRequest = apiClient.request.bind(apiClient);
 
 apiClient.request = function <T = any, R = AxiosResponse<T>, D = any>(
-  config: AxiosRequestConfig<D>
+  config: AxiosRequestConfig<D>,
 ): Promise<R> {
-  const method = (config.method || 'get').toLowerCase();
+  const method = (config.method || "get").toLowerCase();
 
   // Only deduplicate in-flight GET requests
-  if (method === 'get' && config.url) {
-    const serializedParams = config.params ? JSON.stringify(config.params) : '';
+  if (method === "get" && config.url) {
+    const serializedParams = config.params ? JSON.stringify(config.params) : "";
     const dedupeKey = `GET:${config.url}:${serializedParams}`;
 
     if (inFlightGetRequests.has(dedupeKey)) {
@@ -64,12 +65,12 @@ export function setAccessToken(token: string | null) {
   inMemoryToken = token;
   if (token) {
     authCookies.setToken(token);
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, token);
     }
   } else {
     authCookies.clearToken();
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
       localStorage.removeItem(STORAGE_KEYS.USER_DATA);
     }
@@ -81,14 +82,14 @@ export function setAccessToken(token: string | null) {
  */
 export function getAccessToken(): string | null {
   if (inMemoryToken) return inMemoryToken;
-  
+
   const cookieToken = authCookies.getToken();
   if (cookieToken) {
     inMemoryToken = cookieToken;
     return cookieToken;
   }
 
-  if (typeof window !== 'undefined') {
+  if (typeof window !== "undefined") {
     const localToken = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
     if (localToken) {
       inMemoryToken = localToken;
@@ -108,7 +109,7 @@ apiClient.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 // Interceptor Response: Handle 401 Silent Token Refresh Queue
@@ -118,7 +119,10 @@ let failedQueue: Array<{
   reject: (reason?: any) => void;
 }> = [];
 
-const processQueue = (error: AxiosError | null, token: string | null = null) => {
+const processQueue = (
+  error: AxiosError | null,
+  token: string | null = null,
+) => {
   failedQueue.forEach((promise) => {
     if (error) {
       promise.reject(error);
@@ -130,9 +134,19 @@ const processQueue = (error: AxiosError | null, token: string | null = null) => 
 };
 
 apiClient.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    // Global API Success Toast: If showSuccessToast is enabled in config, show message automatically
+    const config = response.config as any;
+    if (config?.showSuccessToast && typeof window !== 'undefined') {
+      const msg = response.data?.message || 'Operation completed successfully';
+      toast.success(msg, 'Success');
+    }
+    return response;
+  },
   async (error: AxiosError) => {
-    const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
+    const originalRequest = error.config as InternalAxiosRequestConfig & {
+      _retry?: boolean;
+    };
 
     // Don't retry auth endpoints themselves
     if (
@@ -163,7 +177,7 @@ apiClient.interceptors.response.use(
         const refreshResponse = await axios.post(
           `${env.apiUrl}${ACTION_CONFIG.AUTH.REFRESH}`,
           {},
-          { withCredentials: true }
+          { withCredentials: true },
         );
 
         const newAccessToken = refreshResponse.data?.data?.accessToken;
@@ -175,7 +189,7 @@ apiClient.interceptors.response.use(
           processQueue(null, newAccessToken);
           return apiClient(originalRequest);
         } else {
-          throw new Error('Refresh token exchange failed');
+          throw new Error("Refresh token exchange failed");
         }
       } catch (refreshErr) {
         processQueue(refreshErr as AxiosError, null);
@@ -186,6 +200,30 @@ apiClient.interceptors.response.use(
       }
     }
 
+    // Global API Error Toast: Shows error toast automatically for all APIs across the app
+    const isSilentRefresh =
+      error.response?.status === 401 &&
+      !originalRequest?.url?.includes(ACTION_CONFIG.AUTH.LOGIN);
+
+    if (!isSilentRefresh && typeof window !== "undefined") {
+      const resData = error.response?.data as any;
+      let errorMsg = "An unexpected error occurred during API request";
+
+      if (resData?.message) {
+        errorMsg = resData.message;
+      } else if (Array.isArray(resData?.errors) && resData.errors.length > 0) {
+        errorMsg = resData.errors
+          .map((e: any) => (typeof e === 'object' && e.message ? e.message : String(e)))
+          .join(", ");
+      } else if (typeof resData?.error === "string") {
+        errorMsg = resData.error;
+      } else if (error.message) {
+        errorMsg = error.message;
+      }
+
+      toast.error(errorMsg, "API Error");
+    }
+
     return Promise.reject(error);
-  }
+  },
 );

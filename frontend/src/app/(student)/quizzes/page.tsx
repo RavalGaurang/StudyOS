@@ -100,8 +100,8 @@ export default function QuizzesPage() {
       setIsCreateOpen(false);
       reset();
       loadData();
-    } catch (err: any) {
-      alert(err.response?.data?.message || 'Error creating quiz');
+    } catch {
+      // Error is caught and displayed by the global toast interceptor
     }
   };
 
@@ -218,6 +218,7 @@ export default function QuizzesPage() {
           <FormInput
             name="title"
             label="Quiz Title"
+            required
             placeholder="e.g. Database Normalization & BCNF Check"
             control={control}
           />
@@ -234,6 +235,7 @@ export default function QuizzesPage() {
               name="durationMinutes"
               label="Duration (Minutes)"
               type="number"
+              required
               control={control}
             />
           </div>
@@ -243,6 +245,7 @@ export default function QuizzesPage() {
             <FormInput
               name="q1_text"
               label="Question Text"
+              required
               placeholder="e.g. In BCNF, must every determinant be a super key?"
               control={control}
             />
@@ -251,12 +254,14 @@ export default function QuizzesPage() {
               <FormInput
                 name="q1_opt1"
                 label="Option 1"
+                required
                 placeholder="True / Yes"
                 control={control}
               />
               <FormInput
                 name="q1_opt2"
                 label="Option 2"
+                required
                 placeholder="False / No"
                 control={control}
               />
@@ -265,6 +270,7 @@ export default function QuizzesPage() {
             <FormSelect
               name="q1_correct"
               label="Correct Option"
+              required
               options={[
                 { value: 1, label: 'Option 1 is correct' },
                 { value: 2, label: 'Option 2 is correct' },

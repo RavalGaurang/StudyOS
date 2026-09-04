@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+dotenv.config({ path: path.resolve(__dirname, '../../.env.development') });
 dotenv.config(); // Also check current working directory for .env
 
 const envSchema = z.object({
@@ -11,7 +12,7 @@ const envSchema = z.object({
     .union([z.string(), z.number()])
     .transform((val) => (typeof val === 'string' ? parseInt(val, 10) : val))
     .default(5000),
-  DATABASE_URL: z.string().min(1, 'DATABASE_URL is required'),
+  DATABASE_URL: z.string().default('postgresql://postgres:postgres@localhost:5432/studyos_db?schema=public'),
   JWT_ACCESS_SECRET: z
     .string()
     .default('studyos_default_jwt_access_secret_key_prod_2026_super_secure'),

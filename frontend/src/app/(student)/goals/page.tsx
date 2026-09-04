@@ -76,8 +76,8 @@ export default function GoalsPage() {
       setIsCreateOpen(false);
       reset();
       loadGoals();
-    } catch (err: any) {
-      alert(err.response?.data?.message || 'Error creating goal');
+    } catch {
+      // Error is caught and displayed by the global toast interceptor
     }
   };
 
@@ -193,6 +193,7 @@ export default function GoalsPage() {
           <FormInput
             name="title"
             label="Goal Title"
+            required
             placeholder="e.g. Log 40 Study Hours this Month"
             control={control}
           />
@@ -207,6 +208,7 @@ export default function GoalsPage() {
           <FormSelect
             name="metricType"
             label="Metric Type"
+            required
             options={[
               { value: 'STUDY_HOURS', label: 'Total Study Hours' },
               { value: 'TASKS_COMPLETED', label: 'Tasks Completed' },
@@ -221,6 +223,7 @@ export default function GoalsPage() {
               name="targetValue"
               label="Target Value"
               type="number"
+              required
               control={control}
             />
 
@@ -236,6 +239,7 @@ export default function GoalsPage() {
             name="targetDate"
             label="Target Deadline"
             type="date"
+            required
             control={control}
           />
 

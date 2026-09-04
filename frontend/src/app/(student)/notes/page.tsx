@@ -122,8 +122,8 @@ export default function NotesPage() {
       setIsCreateOpen(false);
       reset();
       loadData();
-    } catch (err: any) {
-      alert(err.response?.data?.message || 'Error saving note');
+    } catch {
+      // Error is caught and displayed by the global toast interceptor
     }
   };
 
@@ -358,6 +358,7 @@ export default function NotesPage() {
           <FormInput
             name="title"
             label="Note Title"
+            required
             placeholder="e.g. ACID Properties & Transaction Isolation"
             control={control}
           />
@@ -372,6 +373,7 @@ export default function NotesPage() {
           <FormTextarea
             name="content"
             label="Markdown Content"
+            required
             placeholder="# Key Concept&#10;&#10;1. Definition&#10;2. Formulas and Rules..."
             rows={8}
             control={control}

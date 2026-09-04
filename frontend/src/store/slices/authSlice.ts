@@ -8,6 +8,7 @@ import { User } from '@/types/auth.types';
 import { API_STATUS, ApiStatus, STORAGE_KEYS } from '@/enums/app.enum';
 import { authCookies } from '@/utils/cookieUtils';
 import { setPending, setCompleted, setRejected } from '../helpers/stateHelper';
+import { toast } from '@/hooks/useToast';
 
 export interface AuthState {
   user: User | null;

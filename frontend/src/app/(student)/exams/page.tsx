@@ -88,8 +88,8 @@ export default function ExamsPage() {
       setIsCreateOpen(false);
       reset();
       loadData();
-    } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to schedule exam');
+    } catch {
+      // Error is caught and displayed by the global toast interceptor
     }
   };
 
@@ -236,6 +236,7 @@ export default function ExamsPage() {
           <FormInput
             name="title"
             label="Exam Title"
+            required
             placeholder="e.g. DBMS Mid-Term Examination"
             control={control}
           />
@@ -243,6 +244,7 @@ export default function ExamsPage() {
           <FormSelect
             name="subjectId"
             label="Subject"
+            required
             options={subjectOptions}
             control={control}
           />
@@ -252,6 +254,7 @@ export default function ExamsPage() {
               name="examDate"
               label="Exam Date"
               type="date"
+              required
               control={control}
             />
 
@@ -259,6 +262,7 @@ export default function ExamsPage() {
               name="durationMinutes"
               label="Duration (Minutes)"
               type="number"
+              required
               control={control}
             />
           </div>
@@ -268,6 +272,7 @@ export default function ExamsPage() {
               name="maxMarks"
               label="Max Marks"
               type="number"
+              required
               control={control}
             />
 
@@ -275,6 +280,7 @@ export default function ExamsPage() {
               name="weightagePercent"
               label="Weightage % in Final Grade"
               type="number"
+              required
               control={control}
             />
           </div>

@@ -3,9 +3,11 @@
 import React, { useState, InputHTMLAttributes } from 'react';
 import { cn } from '../../lib/utils';
 import { Eye, EyeOff } from 'lucide-react';
+import { Label } from './Label';
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  label?: string;
+  label?: React.ReactNode;
+  isRequired?: boolean;
   error?: string;
   helperText?: string;
   leftElement?: React.ReactNode;
@@ -13,9 +15,29 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, label, error, helperText, leftElement, rightElement, id, type, ...props }, ref) => {
+  (
+    {
+      className,
+      label,
+      error,
+      helperText,
+      leftElement,
+      rightElement,
+      id,
+      type,
+      required,
+      isRequired,
+      ...props
+    },
+    ref
+  ) => {
     const [showPassword, setShowPassword] = useState(false);
-    const inputId = id || (label ? label.toLowerCase().replace(/\s+/g, '-') : undefined);
+    const isFieldRequired = Boolean(required || isRequired);
+    const inputId =
+      id ||
+      (typeof label === 'string'
+        ? label.replace(/[*:]/g, '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '-')
+        : undefined);
 
     const isPasswordType = type === 'password';
     const computedType = isPasswordType ? (showPassword ? 'text' : 'password') : type;
@@ -23,9 +45,9 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="w-full space-y-1.5">
         {label && (
-          <label htmlFor={inputId} className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+          <Label htmlFor={inputId} required={isFieldRequired}>
             {label}
-          </label>
+          </Label>
         )}
         <div className="relative flex items-center">
           {leftElement && (

@@ -71,8 +71,8 @@ export default function SubjectsPage() {
       setIsCreateOpen(false);
       reset();
       loadSubjects();
-    } catch (err: any) {
-      alert(err.response?.data?.message || 'Error creating subject');
+    } catch {
+      // Error is caught and displayed by the global toast interceptor
     }
   };
 
@@ -197,6 +197,7 @@ export default function SubjectsPage() {
           <FormInput
             name="name"
             label="Subject Name"
+            required
             placeholder="e.g. Distributed Operating Systems"
             control={control}
           />

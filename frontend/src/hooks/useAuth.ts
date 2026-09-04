@@ -21,19 +21,25 @@ export function useAuth() {
   const { user, isAuthenticated, isLoading, status } = useAppSelector((state) => state.auth);
   const initialized = useRef(false);
 
+  // 1. Hydrate cached credentials once on initial client mount
   useEffect(() => {
-    // Hydrate cached credentials on client mount to prevent SSR hydration mismatch
     dispatch(hydrateAuth());
+  }, [dispatch]);
+
+  // 2. Verify token & session with backend only when needed
+  useEffect(() => {
+    // If still in initial hydration phase, wait
+    if (isLoading) {
+      return;
+    }
 
     const token = getAccessToken();
     if (!token) {
-      dispatch(setLoading(false));
       return;
     }
 
     // If user is already loaded and authenticated, avoid duplicate network calls
     if (user && isAuthenticated) {
-      dispatch(setLoading(false));
       return;
     }
 
@@ -54,13 +60,11 @@ export function useAuth() {
       } catch {
         // If getting user profile fails and cannot refresh, logout gracefully
         dispatch(logout());
-      } finally {
-        dispatch(setLoading(false));
       }
     }
 
     initAuth();
-  }, [dispatch, user, isAuthenticated]);
+  }, [dispatch, user, isAuthenticated, isLoading]);
 
   return {
     user,

@@ -33,6 +33,12 @@ export const authSlice = createSlice({
   reducers: {
     // Hydrates session on client mount to guarantee 100% SSR hydration consistency
     hydrateAuth: (state) => {
+      // If already authenticated with user in memory, preserve reference to prevent infinite re-renders
+      if (state.isAuthenticated && state.user) {
+        state.isLoading = false;
+        return;
+      }
+
       if (typeof window !== 'undefined') {
         try {
           const cookieToken = authCookies.getToken();

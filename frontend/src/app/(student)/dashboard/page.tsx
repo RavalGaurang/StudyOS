@@ -203,7 +203,7 @@ export default function DashboardPage() {
           {/* Today's Tasks */}
           <Card
             title="Today's Priority Tasks"
-            subtitle={`${data.todayTasks.length} tasks scheduled for today`}
+            subtitle={`${(data.todayTasks || []).length} tasks scheduled for today`}
             action={
               <Link href="/tasks">
                 <Button variant="ghost" size="sm" rightIcon={<ArrowUpRight className="w-3.5 h-3.5" />}>
@@ -212,7 +212,7 @@ export default function DashboardPage() {
               </Link>
             }
           >
-            {data.todayTasks.length === 0 ? (
+            {(data.todayTasks || []).length === 0 ? (
               <EmptyState
                 title="No tasks scheduled today"
                 description="You're all caught up! Create a new task or review your weekly goals."
@@ -226,7 +226,7 @@ export default function DashboardPage() {
               />
             ) : (
               <div className="space-y-2">
-                {data.todayTasks.map((t) => (
+                {(data.todayTasks || []).map((t) => (
                   <div
                     key={t.id}
                     className="flex items-center justify-between p-3 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 hover:bg-slate-100/60 dark:hover:bg-slate-800/80 transition-all"
@@ -298,7 +298,7 @@ export default function DashboardPage() {
             }
           >
             <div className="space-y-4">
-              {data.subjectProgress.map((sub) => (
+              {(data.subjectProgress || []).map((sub) => (
                 <div key={sub.id} className="space-y-1.5">
                   <div className="flex items-center justify-between text-xs">
                     <div className="flex items-center gap-2">
@@ -340,7 +340,7 @@ export default function DashboardPage() {
           >
             <div className="h-64 w-full pt-4">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={data.dailyStudyTrend}>
+                <BarChart data={data.dailyStudyTrend || []}>
                   <XAxis dataKey="day" stroke="#94A3B8" fontSize={12} tickLine={false} />
                   <YAxis stroke="#94A3B8" fontSize={12} tickLine={false} unit="h" />
                   <Tooltip
@@ -373,11 +373,11 @@ export default function DashboardPage() {
               </Link>
             }
           >
-            {data.upcomingExams.length === 0 ? (
+            {(data.upcomingExams || []).length === 0 ? (
               <p className="text-xs text-slate-400 text-center py-6">No upcoming exams scheduled</p>
             ) : (
               <div className="space-y-3">
-                {data.upcomingExams.map((exam) => {
+                {(data.upcomingExams || []).map((exam) => {
                   const daysLeft = getDaysRemaining(exam.examDate);
                   return (
                     <div
@@ -420,11 +420,11 @@ export default function DashboardPage() {
               </Link>
             }
           >
-            {data.upcomingAssignments.length === 0 ? (
+            {(data.upcomingAssignments || []).length === 0 ? (
               <p className="text-xs text-slate-400 text-center py-6">No pending assignments</p>
             ) : (
               <div className="space-y-3">
-                {data.upcomingAssignments.map((ass) => (
+                {(data.upcomingAssignments || []).map((ass) => (
                   <div
                     key={ass.id}
                     className="p-3 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/40 dark:bg-slate-800/30"
@@ -454,8 +454,11 @@ export default function DashboardPage() {
             }
           >
             <div className="space-y-3">
-              {data.goals.map((g) => {
-                const percent = Math.min(100, Math.round((g.currentValue / g.targetValue) * 100));
+              {(data.goals || []).map((g) => {
+                const percent =
+                  g.targetValue && g.targetValue > 0
+                    ? Math.min(100, Math.round(((g.currentValue || 0) / g.targetValue) * 100))
+                    : 0;
                 return (
                   <div key={g.id} className="space-y-1">
                     <div className="flex items-center justify-between text-xs">

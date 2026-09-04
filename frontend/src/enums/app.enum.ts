@@ -26,6 +26,7 @@ export const APP_ENUMS = {
   COOKIE_KEYS: {
     ACCESS_TOKEN: 'studyos_access_token',
     USER_DATA: 'studyos_user',
+    VISITED: 'studyos_visited',
   },
 
   // LocalStorage keys

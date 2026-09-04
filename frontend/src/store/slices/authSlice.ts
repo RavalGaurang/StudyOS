@@ -18,41 +18,40 @@ export interface AuthState {
   error: string | null;
 }
 
-const getInitialAuthState = (): AuthState => {
-  if (typeof window !== 'undefined') {
-    try {
-      const cookieToken = authCookies.getToken();
-      const storedUser = localStorage.getItem(STORAGE_KEYS.USER_DATA);
-
-      if (cookieToken && storedUser) {
-        return {
-          user: JSON.parse(storedUser),
-          accessToken: cookieToken,
-          isAuthenticated: true,
-          isLoading: false,
-          status: API_STATUS.COMPLETED,
-          error: null,
-        };
-      }
-    } catch {
-      // Graceful fallback on JSON parse error
-    }
-  }
-
-  return {
-    user: null,
-    accessToken: null,
-    isAuthenticated: false,
-    isLoading: false,
-    status: API_STATUS.IDLE,
-    error: null,
-  };
-};
+const getInitialAuthState = (): AuthState => ({
+  user: null,
+  accessToken: null,
+  isAuthenticated: false,
+  isLoading: true,
+  status: API_STATUS.IDLE,
+  error: null,
+});
 
 export const authSlice = createSlice({
   name: 'auth',
   initialState: getInitialAuthState(),
   reducers: {
+    // Hydrates session on client mount to guarantee 100% SSR hydration consistency
+    hydrateAuth: (state) => {
+      if (typeof window !== 'undefined') {
+        try {
+          const cookieToken = authCookies.getToken();
+          const storedUser = localStorage.getItem(STORAGE_KEYS.USER_DATA);
+
+          if (cookieToken && storedUser) {
+            state.user = JSON.parse(storedUser);
+            state.accessToken = cookieToken;
+            state.isAuthenticated = true;
+            state.status = API_STATUS.COMPLETED;
+          }
+        } catch {
+          // Graceful fallback on JSON parse error
+        } finally {
+          state.isLoading = false;
+        }
+      }
+    },
+
     // Starts authentication request
     authPending: (state) => {
       setPending(state);
@@ -128,6 +127,7 @@ export const authSlice = createSlice({
 });
 
 export const {
+  hydrateAuth,
   authPending,
   setCredentials,
   setUser,

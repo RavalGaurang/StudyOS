@@ -11,10 +11,15 @@ import { LoadingState } from '../ui/LoadingState';
 import { usePathname, useRouter } from 'next/navigation';
 
 export const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [mounted, setMounted] = useState(false);
   const { isLoading, isAuthenticated } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // If public auth page, don't wrap with AppLayout sidebar
   const isAuthPage =
@@ -24,10 +29,10 @@ export const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children })
     pathname === '/';
 
   useEffect(() => {
-    if (!isAuthPage && !isLoading && !isAuthenticated) {
+    if (mounted && !isAuthPage && !isLoading && !isAuthenticated) {
       router.replace('/login');
     }
-  }, [isAuthPage, isLoading, isAuthenticated, router]);
+  }, [mounted, isAuthPage, isLoading, isAuthenticated, router]);
 
   useEffect(() => {
     setMobileMenuOpen(false);
@@ -37,7 +42,8 @@ export const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children })
     return <>{children}</>;
   }
 
-  if (isLoading) {
+  // Prevent hydration mismatch: render loading shell during SSR & before initial client mount
+  if (!mounted || isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950">
         <LoadingState message="Loading your StudyOS workspace..." />

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { setUser, setLoading, logout } from '../store/slices/authSlice';
+import { setUser, setLoading, logout, hydrateAuth } from '../store/slices/authSlice';
 import { authService } from '../services/authService';
 import { getAccessToken } from '../lib/api/axios';
 import { USER_ROLES } from '@/enums/app.enum';
@@ -22,14 +22,17 @@ export function useAuth() {
   const initialized = useRef(false);
 
   useEffect(() => {
-    // If user is already loaded and authenticated, avoid duplicate network calls
-    if (user && isAuthenticated) {
+    // Hydrate cached credentials on client mount to prevent SSR hydration mismatch
+    dispatch(hydrateAuth());
+
+    const token = getAccessToken();
+    if (!token) {
       dispatch(setLoading(false));
       return;
     }
 
-    const token = getAccessToken();
-    if (!token) {
+    // If user is already loaded and authenticated, avoid duplicate network calls
+    if (user && isAuthenticated) {
       dispatch(setLoading(false));
       return;
     }

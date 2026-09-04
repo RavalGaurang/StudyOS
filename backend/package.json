@@ -21,11 +21,11 @@
     "seed:dev": "npx dotenv-cli -e .env.development -- tsx prisma/seed.ts",
     "seed:prod": "npx dotenv-cli -e .env.production -- tsx prisma/seed.ts",
     "db:push:dev": "npx dotenv-cli -e .env.development -- prisma db push",
-    "db:push:prod": "npx dotenv-cli -e .env.production -- prisma db push",
+    "db:push:prod": "npx dotenv-cli -e .env.production -- prisma db push --skip-seed",
     "test": "jest --detectOpenHandles --passWithNoTests"
   },
-  "prisma": {
-    "seed": "tsx prisma/seed.ts"
+  "optionalDependencies": {
+    "@esbuild/linux-x64": "0.28.2"
   },
   "dependencies": {
     "@prisma/client": "^5.19.1",

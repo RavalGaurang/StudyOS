@@ -60,7 +60,7 @@ Your code is pushed to:
    - **Root Directory**: `backend`
    - **Runtime**: `Node`
    - **Build Command**: `npm install && npx prisma generate && npm run build`
-   - **Start Command**: `npx prisma db push && npm run seed && npm run start`
+   - **Start Command**: `npx prisma db push --skip-seed && npm run start`
    - **Instance Type**: **Free**
 
 5. Under **"Environment Variables"**, add:

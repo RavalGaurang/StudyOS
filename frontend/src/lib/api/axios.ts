@@ -1,6 +1,18 @@
-import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
+import axios, {
+  AxiosError,
+  AxiosRequestConfig,
+  AxiosResponse,
+  InternalAxiosRequestConfig,
+} from 'axios';
 import { env } from '@/config/env';
+import { ACTION_CONFIG } from '@/config/action.config';
+import { authCookies } from '@/utils/cookieUtils';
+import { STORAGE_KEYS } from '@/enums/app.enum';
 
+/**
+ * Reusable Base Axios Instance
+ * Configured for secure cookie handling, CORS with credentials, and unified base URL.
+ */
 export const apiClient = axios.create({
   baseURL: env.apiUrl,
   withCredentials: true,
@@ -10,28 +22,84 @@ export const apiClient = axios.create({
   },
 });
 
+/**
+ * In-flight GET request deduplication cache.
+ * Automatically eliminates duplicate simultaneous GET requests across the entire app in production.
+ */
+const inFlightGetRequests = new Map<string, Promise<any>>();
+
+const originalRequest = apiClient.request.bind(apiClient);
+
+apiClient.request = function <T = any, R = AxiosResponse<T>, D = any>(
+  config: AxiosRequestConfig<D>
+): Promise<R> {
+  const method = (config.method || 'get').toLowerCase();
+
+  // Only deduplicate in-flight GET requests
+  if (method === 'get' && config.url) {
+    const serializedParams = config.params ? JSON.stringify(config.params) : '';
+    const dedupeKey = `GET:${config.url}:${serializedParams}`;
+
+    if (inFlightGetRequests.has(dedupeKey)) {
+      return inFlightGetRequests.get(dedupeKey) as Promise<R>;
+    }
+
+    const requestPromise = (originalRequest as any)(config).finally(() => {
+      inFlightGetRequests.delete(dedupeKey);
+    });
+
+    inFlightGetRequests.set(dedupeKey, requestPromise);
+    return requestPromise as Promise<R>;
+  }
+
+  return (originalRequest as any)(config);
+} as any;
+
 let inMemoryToken: string | null = null;
 
+/**
+ * Sets access token in secure cookies, memory, and localStorage
+ */
 export function setAccessToken(token: string | null) {
   inMemoryToken = token;
-  if (typeof window !== 'undefined') {
-    if (token) {
-      localStorage.setItem('studyos_access_token', token);
-    } else {
-      localStorage.removeItem('studyos_access_token');
-      localStorage.removeItem('studyos_user');
+  if (token) {
+    authCookies.setToken(token);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, token);
+    }
+  } else {
+    authCookies.clearToken();
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
+      localStorage.removeItem(STORAGE_KEYS.USER_DATA);
     }
   }
 }
 
+/**
+ * Gets access token preferentially from secure cookies, falling back to storage/memory
+ */
 export function getAccessToken(): string | null {
-  if (!inMemoryToken && typeof window !== 'undefined') {
-    inMemoryToken = localStorage.getItem('studyos_access_token');
+  if (inMemoryToken) return inMemoryToken;
+  
+  const cookieToken = authCookies.getToken();
+  if (cookieToken) {
+    inMemoryToken = cookieToken;
+    return cookieToken;
   }
-  return inMemoryToken;
+
+  if (typeof window !== 'undefined') {
+    const localToken = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
+    if (localToken) {
+      inMemoryToken = localToken;
+      return localToken;
+    }
+  }
+
+  return null;
 }
 
-// Interceptor Request: Attach Bearer Token
+// Interceptor Request: Automatically attach Bearer token from cookies
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     const token = getAccessToken();
@@ -43,7 +111,7 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Interceptor Response: Handle 401 Silent Token Refresh
+// Interceptor Response: Handle 401 Silent Token Refresh Queue
 let isRefreshing = false;
 let failedQueue: Array<{
   resolve: (value?: unknown) => void;
@@ -71,9 +139,9 @@ apiClient.interceptors.response.use(
       error.response?.status === 401 &&
       originalRequest &&
       !originalRequest._retry &&
-      !originalRequest.url?.includes('/auth/login') &&
-      !originalRequest.url?.includes('/auth/register') &&
-      !originalRequest.url?.includes('/auth/refresh')
+      !originalRequest.url?.includes(ACTION_CONFIG.AUTH.LOGIN) &&
+      !originalRequest.url?.includes(ACTION_CONFIG.AUTH.REGISTER) &&
+      !originalRequest.url?.includes(ACTION_CONFIG.AUTH.REFRESH)
     ) {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
@@ -93,7 +161,7 @@ apiClient.interceptors.response.use(
 
       try {
         const refreshResponse = await axios.post(
-          `${env.apiUrl}/auth/refresh`,
+          `${env.apiUrl}${ACTION_CONFIG.AUTH.REFRESH}`,
           {},
           { withCredentials: true }
         );

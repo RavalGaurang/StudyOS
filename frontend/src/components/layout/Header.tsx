@@ -8,6 +8,7 @@ import { authService } from '../../services/authService';
 import { Avatar } from '../ui/Avatar';
 import { Search, Moon, Sun, Bell, Timer, LogOut, Menu } from 'lucide-react';
 import { NotificationDropdown } from '../common/NotificationDropdown';
+import { APP_ROUTES } from '@/enums/app.enum';
 
 export const Header: React.FC<{ onMobileMenuToggle?: () => void }> = ({
   onMobileMenuToggle,
@@ -31,7 +32,7 @@ export const Header: React.FC<{ onMobileMenuToggle?: () => void }> = ({
   const handleLogout = async () => {
     await authService.logout();
     dispatch(logout());
-    window.location.href = '/login';
+    window.location.href = APP_ROUTES.LOGIN;
   };
 
   const formatTimer = (seconds: number) => {

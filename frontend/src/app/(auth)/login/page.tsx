@@ -6,13 +6,15 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { authService } from '../../../services/authService';
-import { useAppDispatch } from '../../../store/hooks';
-import { setCredentials } from '../../../store/slices/authSlice';
-import { FormInput } from '../../../components/ui/FormInput';
-import { Button } from '../../../components/ui/Button';
-import { Card } from '../../../components/ui/Card';
+import { authService } from '@/services/authService';
+import { useAppDispatch } from '@/store/hooks';
+import { setCredentials } from '@/store/slices/authSlice';
+import { FormInput } from '@/components/ui/FormInput';
+import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
 import { GraduationCap, Users, Shield, UserCheck, ArrowRight, Lock, Mail } from 'lucide-react';
+import { APP_ROUTES, USER_ROLES } from '@/enums/app.enum';
+import { getApiErrorMessage } from '@/lib/api/apiService';
 
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid email address').toLowerCase(),
@@ -43,19 +45,19 @@ export default function LoginPage() {
     setServerError(null);
     try {
       const result = await authService.login(values);
+      // Updates Redux and stores token in secure cookies
       dispatch(setCredentials(result));
 
-      if (result.user.role === 'PARENT') {
-        router.push('/parent/dashboard');
-      } else if (result.user.role === 'ADMIN') {
-        router.push('/admin/dashboard');
+      // Role-based redirect using application routes enum
+      if (result.user.role === USER_ROLES.PARENT) {
+        router.push(APP_ROUTES.PARENT_DASHBOARD);
+      } else if (result.user.role === USER_ROLES.ADMIN) {
+        router.push(APP_ROUTES.ADMIN_DASHBOARD);
       } else {
-        router.push('/dashboard');
+        router.push(APP_ROUTES.DASHBOARD);
       }
     } catch (err: any) {
-      setServerError(
-        err.response?.data?.message || 'Invalid email or password. Please try again.'
-      );
+      setServerError(getApiErrorMessage(err));
     }
   };
 
@@ -67,7 +69,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col justify-center py-8 sm:py-12 sm:px-6 lg:px-8 px-4 selection:bg-indigo-500 selection:text-white text-slate-900 dark:text-slate-100">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-        <Link href="/" className="inline-flex items-center justify-center">
+        <Link href={APP_ROUTES.HOME} className="inline-flex items-center justify-center">
           <img
             src="/images/logo.png"
             alt="StudyOS"
@@ -79,7 +81,7 @@ export default function LoginPage() {
         </h2>
         <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
           Or{' '}
-          <Link href="/register" className="font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">
+          <Link href={APP_ROUTES.REGISTER} className="font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">
             create a new student profile
           </Link>
         </p>
@@ -115,7 +117,7 @@ export default function LoginPage() {
             <div className="flex items-center justify-between">
               <div className="text-xs">
                 <Link
-                  href="/forgot-password"
+                  href={APP_ROUTES.FORGOT_PASSWORD}
                   className="font-medium text-indigo-600 hover:text-indigo-500"
                 >
                   Forgot your password?

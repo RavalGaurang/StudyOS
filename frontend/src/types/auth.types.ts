@@ -1,4 +1,5 @@
-export type UserRole = 'STUDENT' | 'PARENT' | 'TEACHER' | 'ADMIN';
+import { UserRole } from '@/enums/app.enum';
+export type { UserRole };
 
 export interface StudentProfile {
   id: string;

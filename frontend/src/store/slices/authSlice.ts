@@ -1,79 +1,139 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AuthState, User } from '../../types/auth.types';
+/**
+ * Authentication Redux Slice
+ * Manages user authentication state, session restoration, and secure cookies.
+ */
 
-const getInitialState = (): AuthState => {
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { User } from '@/types/auth.types';
+import { API_STATUS, ApiStatus, STORAGE_KEYS } from '@/enums/app.enum';
+import { authCookies } from '@/utils/cookieUtils';
+import { setPending, setCompleted, setRejected } from '../helpers/stateHelper';
+
+export interface AuthState {
+  user: User | null;
+  accessToken: string | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  status: ApiStatus;
+  error: string | null;
+}
+
+const getInitialAuthState = (): AuthState => {
   if (typeof window !== 'undefined') {
     try {
-      const storedUser = localStorage.getItem('studyos_user');
-      const storedToken = localStorage.getItem('studyos_access_token');
-      if (storedUser && storedToken) {
+      const cookieToken = authCookies.getToken();
+      const storedUser = localStorage.getItem(STORAGE_KEYS.USER_DATA);
+
+      if (cookieToken && storedUser) {
         return {
           user: JSON.parse(storedUser),
-          accessToken: storedToken,
+          accessToken: cookieToken,
           isAuthenticated: true,
           isLoading: false,
+          status: API_STATUS.COMPLETED,
           error: null,
         };
       }
     } catch {
-      // Fallback on parse error
+      // Graceful fallback on JSON parse error
     }
   }
+
   return {
     user: null,
     accessToken: null,
     isAuthenticated: false,
-    isLoading: true,
+    isLoading: false,
+    status: API_STATUS.IDLE,
     error: null,
   };
 };
 
 export const authSlice = createSlice({
   name: 'auth',
-  initialState: getInitialState(),
+  initialState: getInitialAuthState(),
   reducers: {
+    // Starts authentication request
+    authPending: (state) => {
+      setPending(state);
+      state.isLoading = true;
+    },
+
+    // Successful login or registration
     setCredentials: (
       state,
       action: PayloadAction<{ user: User; accessToken: string }>
     ) => {
-      state.user = action.payload.user;
-      state.accessToken = action.payload.accessToken;
+      const { user, accessToken } = action.payload;
+      setCompleted(state);
+      state.user = user;
+      state.accessToken = accessToken;
       state.isAuthenticated = true;
       state.isLoading = false;
-      state.error = null;
+
+      // Persist in secure cookies and storage
+      authCookies.setToken(accessToken);
       if (typeof window !== 'undefined') {
-        localStorage.setItem('studyos_user', JSON.stringify(action.payload.user));
-        localStorage.setItem('studyos_access_token', action.payload.accessToken);
+        localStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(user));
+        localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
       }
     },
+
+    // Updates user profile
     setUser: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
       state.isAuthenticated = true;
       state.isLoading = false;
+      state.status = API_STATUS.COMPLETED;
+
       if (typeof window !== 'undefined') {
-        localStorage.setItem('studyos_user', JSON.stringify(action.payload));
+        localStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(action.payload));
       }
     },
+
+    // Sets loading state
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
+      state.status = action.payload ? API_STATUS.PENDING : API_STATUS.IDLE;
     },
+
+    // Sets authentication error
     setError: (state, action: PayloadAction<string | null>) => {
-      state.error = action.payload;
+      if (action.payload) {
+        setRejected(state, action.payload);
+      } else {
+        state.error = null;
+        state.status = API_STATUS.IDLE;
+      }
       state.isLoading = false;
     },
+
+    // Logout and purge credentials
     logout: (state) => {
       state.user = null;
       state.accessToken = null;
       state.isAuthenticated = false;
       state.isLoading = false;
+      state.status = API_STATUS.IDLE;
       state.error = null;
+
+      // Purge from cookies and storage
+      authCookies.clearToken();
       if (typeof window !== 'undefined') {
-        localStorage.removeItem('studyos_user');
-        localStorage.removeItem('studyos_access_token');
+        localStorage.removeItem(STORAGE_KEYS.USER_DATA);
+        localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
       }
     },
   },
 });
 
-export const { setCredentials, setUser, setLoading, setError, logout } = authSlice.actions;
+export const {
+  authPending,
+  setCredentials,
+  setUser,
+  setLoading,
+  setError,
+  logout,
+} = authSlice.actions;
+
 export default authSlice.reducer;

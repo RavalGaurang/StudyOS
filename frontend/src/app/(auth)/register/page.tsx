@@ -14,6 +14,8 @@ import { FormSelect } from '../../../components/ui/FormSelect';
 import { Button } from '../../../components/ui/Button';
 import { Card } from '../../../components/ui/Card';
 import { ArrowRight, Lock, Mail, User, School } from 'lucide-react';
+import { APP_ROUTES, USER_ROLES } from '@/enums/app.enum';
+import { getApiErrorMessage } from '@/lib/api/apiService';
 
 const registerSchema = z.object({
   email: z.string().email('Please enter a valid email address').toLowerCase(),
@@ -62,22 +64,20 @@ export default function RegisterPage() {
       const result = await authService.register(values);
       dispatch(setCredentials(result));
 
-      if (result.user.role === 'PARENT') {
-        router.push('/parent/dashboard');
+      if (result.user.role === USER_ROLES.PARENT) {
+        router.push(APP_ROUTES.PARENT_DASHBOARD);
       } else {
-        router.push('/dashboard');
+        router.push(APP_ROUTES.DASHBOARD);
       }
     } catch (err: any) {
-      setServerError(
-        err.response?.data?.message || 'Registration failed. Please check your inputs.'
-      );
+      setServerError(getApiErrorMessage(err));
     }
   };
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 px-4 selection:bg-indigo-500 selection:text-white">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-        <Link href="/" className="inline-flex items-center justify-center">
+        <Link href={APP_ROUTES.HOME} className="inline-flex items-center justify-center">
           <img
             src="/images/logo.png"
             alt="StudyOS"
@@ -89,7 +89,7 @@ export default function RegisterPage() {
         </h2>
         <p className="mt-1 text-xs text-slate-500">
           Already have an account?{' '}
-          <Link href="/login" className="font-semibold text-indigo-600 hover:underline">
+          <Link href={APP_ROUTES.LOGIN} className="font-semibold text-indigo-600 hover:underline">
             Sign in
           </Link>
         </p>

@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { setSearchModalOpen, setPomodoroModalOpen, setTheme } from '../../store/slices/uiSlice';
-import { logout } from '../../store/slices/authSlice';
+import { secureLogout } from '../../store/slices/apiSlice';
 import { authService } from '../../services/authService';
 import { Avatar } from '../ui/Avatar';
 import { Search, Moon, Sun, Bell, Timer, LogOut, Menu } from 'lucide-react';
@@ -15,7 +15,7 @@ export const Header: React.FC<{ onMobileMenuToggle?: () => void }> = ({
 }) => {
   const dispatch = useAppDispatch();
   const { theme, activePomodoro } = useAppSelector((state) => state.ui);
-  const { user } = useAppSelector((state) => state.auth);
+  const { user } = useAppSelector((state) => state.api.auth);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
 
@@ -31,7 +31,7 @@ export const Header: React.FC<{ onMobileMenuToggle?: () => void }> = ({
 
   const handleLogout = async () => {
     await authService.logout();
-    dispatch(logout());
+    dispatch(secureLogout());
     window.location.href = APP_ROUTES.LOGIN;
   };
 

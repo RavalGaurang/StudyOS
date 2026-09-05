@@ -38,7 +38,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ mobileOpen = false, onMobileCl
   const pathname = usePathname();
   const dispatch = useAppDispatch();
   const { sidebarOpen } = useAppSelector((state) => state.ui);
-  const { user } = useAppSelector((state) => state.auth);
+  const { user } = useAppSelector((state) => state.api.auth);
 
   const role = user?.role || 'STUDENT';
 

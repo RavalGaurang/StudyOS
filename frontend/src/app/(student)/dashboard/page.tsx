@@ -42,7 +42,7 @@ import { formatDate, getDaysRemaining } from '../../../lib/utils';
 
 export default function DashboardPage() {
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.auth);
+  const { user } = useAppSelector((state) => state.api.auth);
   const [data, setData] = useState<StudentDashboardAnalytics | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

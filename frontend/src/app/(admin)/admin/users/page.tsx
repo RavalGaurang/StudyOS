@@ -2,13 +2,15 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { callApiAction } from '@/store/actions/apiAction';
 import {
-  fetchUsers,
-  createUser,
-  updateUser,
-  deleteUser,
-  setSelectedUser,
-} from '@/store/slices/userSlice';
+  selectApiData,
+  selectApiMeta,
+  selectApiIsLoading,
+  selectActionLoading,
+} from '@/store/slices/apiSlice';
+import { ACTION_CONFIG } from '@/config/action.config';
+import { HTTP_METHODS } from '@/enums/app.enum';
 import { UserFilters, UserFilterValues } from '@/components/users/UserFilters';
 import { UserTable } from '@/components/users/UserTable';
 import { UserFormModal } from '@/components/users/UserFormModal';
@@ -21,8 +23,17 @@ import { Users, UserPlus } from 'lucide-react';
 export default function AdminUsersPage() {
   const dispatch = useAppDispatch();
 
-  const { users, pagination, loading, actionLoading } = useAppSelector(
-    (state) => state.users
+  // Redux Selectors from Unified API Architecture
+  const rawUsers = useAppSelector((state) =>
+    selectApiData<any>(state, 'users', 'list')
+  );
+  // Support both User[] or { users: User[] } response structures
+  const users: User[] = Array.isArray(rawUsers)
+    ? rawUsers
+    : rawUsers?.users || [];
+
+  const meta = useAppSelector((state) =>
+    selectApiMeta(state, 'users', 'list')
   );
 
   // Filter & pagination local control
@@ -32,6 +43,20 @@ export default function AdminUsersPage() {
     role: '',
     isActive: '',
   });
+
+  const pagination = meta || {
+    page: currentPage,
+    limit: 10,
+    total: users.length,
+    totalPages: 1,
+  };
+
+  const loading = useAppSelector((state) =>
+    selectApiIsLoading(state, 'users', 'list')
+  );
+  const actionLoading = useAppSelector((state) =>
+    selectActionLoading(state, 'user-action')
+  );
 
   // Modal states
   const [formModalOpen, setFormModalOpen] = useState(false);
@@ -48,7 +73,15 @@ export default function AdminUsersPage() {
     if (filters.role) params.role = filters.role;
     if (filters.isActive) params.isActive = filters.isActive;
 
-    dispatch(fetchUsers(params));
+    dispatch(
+      callApiAction({
+        endpoint: ACTION_CONFIG.USERS.BASE,
+        params,
+        module: 'users',
+        subKey: 'list',
+        force: true,
+      })
+    );
   }, [dispatch, currentPage, filters]);
 
   useEffect(() => {
@@ -70,18 +103,18 @@ export default function AdminUsersPage() {
   // Open Edit Modal
   const handleOpenEditModal = (user: User) => {
     setEditingUser(user);
-    dispatch(setSelectedUser(user));
     setFormModalOpen(true);
   };
 
   // Submit Add / Edit Form
   const handleFormSubmit = async (formData: any) => {
     if (editingUser) {
-      // Update user (Success toast dispatched directly by userSlice reducer)
+      // Update user
       const resultAction = await dispatch(
-        updateUser({
-          id: editingUser.id,
-          payload: {
+        callApiAction({
+          endpoint: ACTION_CONFIG.USERS.BY_ID(editingUser.id),
+          method: HTTP_METHODS.PUT,
+          data: {
             firstName: formData.firstName,
             lastName: formData.lastName,
             email: formData.email,
@@ -89,29 +122,39 @@ export default function AdminUsersPage() {
             role: formData.role,
             isActive: formData.isActive,
           },
+          module: 'users',
+          actionKey: 'user-action',
+          showToast: { success: 'User updated successfully' },
         })
       );
 
-      if (updateUser.fulfilled.match(resultAction)) {
+      if (callApiAction.fulfilled.match(resultAction)) {
         setFormModalOpen(false);
         setEditingUser(null);
         loadUsers();
       }
     } else {
-      // Create user (Success toast dispatched directly by userSlice reducer)
+      // Create user
       const resultAction = await dispatch(
-        createUser({
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-          mobile: formData.mobile || undefined,
-          password: formData.password,
-          role: formData.role,
-          isActive: formData.isActive,
+        callApiAction({
+          endpoint: ACTION_CONFIG.USERS.BASE,
+          method: HTTP_METHODS.POST,
+          data: {
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            email: formData.email,
+            mobile: formData.mobile || undefined,
+            password: formData.password,
+            role: formData.role,
+            isActive: formData.isActive,
+          },
+          module: 'users',
+          actionKey: 'user-action',
+          showToast: { success: 'User created successfully' },
         })
       );
 
-      if (createUser.fulfilled.match(resultAction)) {
+      if (callApiAction.fulfilled.match(resultAction)) {
         setFormModalOpen(false);
         loadUsers();
       }
@@ -127,10 +170,18 @@ export default function AdminUsersPage() {
   const handleConfirmDelete = async () => {
     if (!deleteConfirmUser) return;
 
-    // Delete user (Success toast dispatched directly by userSlice reducer)
-    const resultAction = await dispatch(deleteUser(deleteConfirmUser.id));
+    // Delete user
+    const resultAction = await dispatch(
+      callApiAction({
+        endpoint: ACTION_CONFIG.USERS.BY_ID(deleteConfirmUser.id),
+        method: HTTP_METHODS.DELETE,
+        module: 'users',
+        actionKey: 'user-action',
+        showToast: { success: 'User deleted successfully' },
+      })
+    );
 
-    if (deleteUser.fulfilled.match(resultAction)) {
+    if (callApiAction.fulfilled.match(resultAction)) {
       // Handle last item on last page condition
       if (users.length === 1 && currentPage > 1) {
         setCurrentPage((prev) => prev - 1);

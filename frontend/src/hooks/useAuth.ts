@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { setUser, setLoading, logout, hydrateAuth } from '../store/slices/authSlice';
+import { setUser, secureLogout, hydrateAuth } from '../store/slices/apiSlice';
 import { authService } from '../services/authService';
 import { getAccessToken } from '../lib/api/axios';
 import { USER_ROLES } from '@/enums/app.enum';
@@ -18,7 +18,9 @@ let inFlightMePromise: Promise<User> | null = null;
  */
 export function useAuth() {
   const dispatch = useAppDispatch();
-  const { user, isAuthenticated, isLoading, status } = useAppSelector((state) => state.auth);
+  const { user, isAuthenticated, isLoading, status } = useAppSelector(
+    (state) => state.api.auth
+  );
   const initialized = useRef(false);
 
   // 1. Hydrate cached credentials once on initial client mount
@@ -59,7 +61,7 @@ export function useAuth() {
         dispatch(setUser(currentUser));
       } catch {
         // If getting user profile fails and cannot refresh, logout gracefully
-        dispatch(logout());
+        dispatch(secureLogout());
       }
     }
 

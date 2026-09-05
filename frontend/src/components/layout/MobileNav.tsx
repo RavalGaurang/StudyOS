@@ -11,7 +11,7 @@ import { cn } from '../../lib/utils';
 export const MobileNav: React.FC = () => {
   const pathname = usePathname();
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.auth);
+  const { user } = useAppSelector((state) => state.api.auth);
   const role = user?.role || 'STUDENT';
 
   const studentLinks = [

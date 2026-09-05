@@ -13,40 +13,40 @@ router.use(authenticate);
 
 router.get(
   '/',
-  authorize(UserRole.STUDENT),
+  authorize(UserRole.STUDENT, UserRole.TEACHER),
   validateRequest({ query: taskQuerySchema }),
   asyncHandler((req, res) => taskController.getTasks(req, res))
 );
 
 router.post(
   '/',
-  authorize(UserRole.STUDENT),
+  authorize(UserRole.STUDENT, UserRole.TEACHER),
   validateRequest({ body: createTaskSchema }),
   asyncHandler((req, res) => taskController.createTask(req, res))
 );
 
 router.get(
   '/:id',
-  authorize(UserRole.STUDENT),
+  authorize(UserRole.STUDENT, UserRole.TEACHER),
   asyncHandler((req, res) => taskController.getTaskById(req, res))
 );
 
 router.patch(
   '/:id',
-  authorize(UserRole.STUDENT),
+  authorize(UserRole.STUDENT, UserRole.TEACHER),
   validateRequest({ body: updateTaskSchema }),
   asyncHandler((req, res) => taskController.updateTask(req, res))
 );
 
 router.patch(
   '/:id/toggle',
-  authorize(UserRole.STUDENT),
+  authorize(UserRole.STUDENT, UserRole.TEACHER),
   asyncHandler((req, res) => taskController.toggleStatus(req, res))
 );
 
 router.delete(
   '/:id',
-  authorize(UserRole.STUDENT),
+  authorize(UserRole.STUDENT, UserRole.TEACHER),
   asyncHandler((req, res) => taskController.deleteTask(req, res))
 );
 

@@ -69,7 +69,7 @@ export const Header: React.FC<{ onMobileMenuToggle?: () => void }> = ({
 
       <div className="flex items-center gap-1.5 sm:gap-3">
         {/* Floating Pomodoro Quick-Pill */}
-        {user?.role === 'STUDENT' && (
+        {(user?.role === 'STUDENT' || user?.role === 'TEACHER') && (
           <button
             onClick={() => dispatch(setPomodoroModalOpen(true))}
             className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-full bg-indigo-50 border border-indigo-200/80 text-indigo-700 dark:bg-indigo-950/60 dark:border-indigo-800/80 dark:text-indigo-300 text-xs font-bold transition-transform hover:scale-105"

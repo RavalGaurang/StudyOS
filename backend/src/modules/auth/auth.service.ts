@@ -109,6 +109,13 @@ export class AuthService {
             userId: newUser.id,
           },
         });
+        await tx.studentProfile.create({
+          data: {
+            userId: newUser.id,
+            schoolName: input.schoolName || 'Department of Academics',
+            gradeLevel: input.gradeLevel || 'Faculty',
+          },
+        });
       } else if (input.role === UserRole.ADMIN) {
         await tx.adminProfile.create({
           data: {

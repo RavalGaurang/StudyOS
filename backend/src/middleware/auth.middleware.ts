@@ -50,6 +50,29 @@ export async function authenticate(req: Request, res: Response, next: NextFuncti
       throw new UnauthorizedError('User account is inactive or no longer exists');
     }
 
+    // Ensure Teacher has an active teacherProfile and academic workspace profile (studentProfile)
+    if (user.role === 'TEACHER') {
+      if (!user.teacherProfile) {
+        await prisma.teacherProfile.create({
+          data: {
+            userId: user.id,
+            department: 'Academics & Faculty',
+            title: 'Professor',
+          },
+        });
+      }
+      if (!user.studentProfile) {
+        const sp = await prisma.studentProfile.create({
+          data: {
+            userId: user.id,
+            schoolName: 'Department of Academics',
+            gradeLevel: 'Faculty',
+          },
+        });
+        user.studentProfile = { id: sp.id };
+      }
+    }
+
     let profileId: string | undefined;
     if (user.studentProfile) profileId = user.studentProfile.id;
     else if (user.parentProfile) profileId = user.parentProfile.id;

@@ -13,33 +13,33 @@ router.use(authenticate);
 
 router.get(
   '/',
-  authorize(UserRole.STUDENT, UserRole.PARENT),
+  authorize(UserRole.STUDENT, UserRole.PARENT, UserRole.TEACHER),
   asyncHandler((req, res) => examController.getExams(req, res))
 );
 
 router.post(
   '/',
-  authorize(UserRole.STUDENT),
+  authorize(UserRole.STUDENT, UserRole.TEACHER),
   validateRequest({ body: createExamSchema }),
   asyncHandler((req, res) => examController.createExam(req, res))
 );
 
 router.get(
   '/:id',
-  authorize(UserRole.STUDENT, UserRole.PARENT),
+  authorize(UserRole.STUDENT, UserRole.PARENT, UserRole.TEACHER),
   asyncHandler((req, res) => examController.getExamById(req, res))
 );
 
 router.patch(
   '/:id',
-  authorize(UserRole.STUDENT),
+  authorize(UserRole.STUDENT, UserRole.TEACHER),
   validateRequest({ body: updateExamSchema }),
   asyncHandler((req, res) => examController.updateExam(req, res))
 );
 
 router.delete(
   '/:id',
-  authorize(UserRole.STUDENT),
+  authorize(UserRole.STUDENT, UserRole.TEACHER),
   asyncHandler((req, res) => examController.deleteExam(req, res))
 );
 

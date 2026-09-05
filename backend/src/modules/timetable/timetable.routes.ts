@@ -13,33 +13,33 @@ router.use(authenticate);
 
 router.get(
   '/',
-  authorize(UserRole.STUDENT, UserRole.PARENT),
+  authorize(UserRole.STUDENT, UserRole.PARENT, UserRole.TEACHER),
   asyncHandler((req, res) => timetableController.getTimetable(req, res))
 );
 
 router.get(
   '/:id',
-  authorize(UserRole.STUDENT, UserRole.PARENT),
+  authorize(UserRole.STUDENT, UserRole.PARENT, UserRole.TEACHER),
   asyncHandler((req, res) => timetableController.getEventById(req, res))
 );
 
 router.post(
   '/',
-  authorize(UserRole.STUDENT),
+  authorize(UserRole.STUDENT, UserRole.TEACHER),
   validateRequest({ body: createTimetableEventSchema }),
   asyncHandler((req, res) => timetableController.createEvent(req, res))
 );
 
 router.patch(
   '/:id',
-  authorize(UserRole.STUDENT),
+  authorize(UserRole.STUDENT, UserRole.TEACHER),
   validateRequest({ body: updateTimetableEventSchema }),
   asyncHandler((req, res) => timetableController.updateEvent(req, res))
 );
 
 router.delete(
   '/:id',
-  authorize(UserRole.STUDENT),
+  authorize(UserRole.STUDENT, UserRole.TEACHER),
   asyncHandler((req, res) => timetableController.deleteEvent(req, res))
 );
 

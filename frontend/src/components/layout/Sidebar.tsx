@@ -71,9 +71,26 @@ export const Sidebar: React.FC<SidebarProps> = ({ mobileOpen = false, onMobileCl
     { href: '/admin/system', label: 'System Analytics', icon: Activity },
   ];
 
+  const teacherLinks = [
+    { href: '/dashboard', label: 'Teacher Dashboard', icon: LayoutDashboard },
+    { href: '/subjects', label: 'Subjects & Classes', icon: BookOpen },
+    { href: '/tasks', label: 'Tasks', icon: CheckSquare },
+    { href: '/assignments', label: 'Assignments', icon: FileText },
+    { href: '/exams', label: 'Exams & Tests', icon: GraduationCap },
+    { href: '/timetable', label: 'Teaching Schedule', icon: Calendar },
+    { href: '/attendance', label: 'Class Attendance', icon: Clock },
+    { href: '/notes', label: 'Lecture Notes', icon: BookMarked },
+    { href: '/study', label: 'Focus & Study', icon: Timer },
+    { href: '/quizzes', label: 'Quizzes', icon: HelpCircle },
+    { href: '/flashcards', label: 'Flashcards', icon: Layers },
+    { href: '/analytics', label: 'Analytics', icon: BarChart3 },
+    { href: '/ai', label: 'AI Teaching Assistant', icon: Bot },
+  ];
+
   let links = studentLinks;
   if (role === 'PARENT') links = parentLinks;
   else if (role === 'ADMIN') links = adminLinks;
+  else if (role === 'TEACHER') links = teacherLinks;
 
   const brandHomeHref =
     role === 'PARENT' ? '/parent/dashboard' : role === 'ADMIN' ? '/admin/dashboard' : '/dashboard';

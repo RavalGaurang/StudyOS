@@ -20,19 +20,19 @@ router.use(authenticate);
 // Sessions
 router.get(
   '/sessions',
-  authorize(UserRole.STUDENT, UserRole.PARENT),
+  authorize(UserRole.STUDENT, UserRole.PARENT, UserRole.TEACHER),
   asyncHandler((req, res) => studyController.getSessions(req, res))
 );
 
 router.get(
   '/sessions/:id',
-  authorize(UserRole.STUDENT, UserRole.PARENT),
+  authorize(UserRole.STUDENT, UserRole.PARENT, UserRole.TEACHER),
   asyncHandler((req, res) => studyController.getSessionById(req, res))
 );
 
 router.post(
   '/sessions',
-  authorize(UserRole.STUDENT),
+  authorize(UserRole.STUDENT, UserRole.TEACHER),
   validateRequest({ body: createStudySessionSchema }),
   asyncHandler((req, res) => studyController.logSession(req, res))
 );
@@ -40,26 +40,26 @@ router.post(
 // Plans
 router.get(
   '/plans',
-  authorize(UserRole.STUDENT),
+  authorize(UserRole.STUDENT, UserRole.TEACHER),
   asyncHandler((req, res) => studyController.getPlans(req, res))
 );
 
 router.get(
   '/plans/:id',
-  authorize(UserRole.STUDENT),
+  authorize(UserRole.STUDENT, UserRole.TEACHER),
   asyncHandler((req, res) => studyController.getPlanById(req, res))
 );
 
 router.post(
   '/plans',
-  authorize(UserRole.STUDENT),
+  authorize(UserRole.STUDENT, UserRole.TEACHER),
   validateRequest({ body: createStudyPlanSchema }),
   asyncHandler((req, res) => studyController.createPlan(req, res))
 );
 
 router.patch(
   '/plans/items/:itemId',
-  authorize(UserRole.STUDENT),
+  authorize(UserRole.STUDENT, UserRole.TEACHER),
   validateRequest({ body: updateStudyPlanItemSchema }),
   asyncHandler((req, res) => studyController.updatePlanItem(req, res))
 );
@@ -67,33 +67,33 @@ router.patch(
 // Goals
 router.get(
   '/goals',
-  authorize(UserRole.STUDENT, UserRole.PARENT),
+  authorize(UserRole.STUDENT, UserRole.PARENT, UserRole.TEACHER),
   asyncHandler((req, res) => studyController.getGoals(req, res))
 );
 
 router.get(
   '/goals/:id',
-  authorize(UserRole.STUDENT, UserRole.PARENT),
+  authorize(UserRole.STUDENT, UserRole.PARENT, UserRole.TEACHER),
   asyncHandler((req, res) => studyController.getGoalById(req, res))
 );
 
 router.post(
   '/goals',
-  authorize(UserRole.STUDENT),
+  authorize(UserRole.STUDENT, UserRole.TEACHER),
   validateRequest({ body: createGoalSchema }),
   asyncHandler((req, res) => studyController.createGoal(req, res))
 );
 
 router.patch(
   '/goals/:id',
-  authorize(UserRole.STUDENT),
+  authorize(UserRole.STUDENT, UserRole.TEACHER),
   validateRequest({ body: updateGoalSchema }),
   asyncHandler((req, res) => studyController.updateGoal(req, res))
 );
 
 router.delete(
   '/goals/:id',
-  authorize(UserRole.STUDENT),
+  authorize(UserRole.STUDENT, UserRole.TEACHER),
   asyncHandler((req, res) => studyController.deleteGoal(req, res))
 );
 

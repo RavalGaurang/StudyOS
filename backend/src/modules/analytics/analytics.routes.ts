@@ -11,7 +11,7 @@ router.use(authenticate);
 
 router.get(
   '/student',
-  authorize(UserRole.STUDENT),
+  authorize(UserRole.STUDENT, UserRole.TEACHER),
   asyncHandler((req, res) => analyticsController.getStudentDashboard(req, res))
 );
 

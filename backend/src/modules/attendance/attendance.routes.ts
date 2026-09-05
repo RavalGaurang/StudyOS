@@ -13,40 +13,40 @@ router.use(authenticate);
 
 router.get(
   '/',
-  authorize(UserRole.STUDENT, UserRole.PARENT),
+  authorize(UserRole.STUDENT, UserRole.PARENT, UserRole.TEACHER),
   validateRequest({ query: attendanceQuerySchema }),
   asyncHandler((req, res) => attendanceController.getAttendance(req, res))
 );
 
 router.get(
   '/summary',
-  authorize(UserRole.STUDENT, UserRole.PARENT),
+  authorize(UserRole.STUDENT, UserRole.PARENT, UserRole.TEACHER),
   asyncHandler((req, res) => attendanceController.getAttendanceSummary(req, res))
 );
 
 router.get(
   '/:id',
-  authorize(UserRole.STUDENT, UserRole.PARENT),
+  authorize(UserRole.STUDENT, UserRole.PARENT, UserRole.TEACHER),
   asyncHandler((req, res) => attendanceController.getAttendanceById(req, res))
 );
 
 router.post(
   '/',
-  authorize(UserRole.STUDENT),
+  authorize(UserRole.STUDENT, UserRole.TEACHER),
   validateRequest({ body: recordAttendanceSchema }),
   asyncHandler((req, res) => attendanceController.recordAttendance(req, res))
 );
 
 router.patch(
   '/:id',
-  authorize(UserRole.STUDENT),
+  authorize(UserRole.STUDENT, UserRole.TEACHER),
   validateRequest({ body: updateAttendanceSchema }),
   asyncHandler((req, res) => attendanceController.updateAttendance(req, res))
 );
 
 router.delete(
   '/:id',
-  authorize(UserRole.STUDENT),
+  authorize(UserRole.STUDENT, UserRole.TEACHER),
   asyncHandler((req, res) => attendanceController.deleteAttendance(req, res))
 );
 

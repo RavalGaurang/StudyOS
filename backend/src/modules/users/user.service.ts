@@ -170,6 +170,13 @@ export class UserService {
         await tx.teacherProfile.create({
           data: { userId: newUser.id },
         });
+        await tx.studentProfile.create({
+          data: {
+            userId: newUser.id,
+            schoolName: 'Department of Academics',
+            gradeLevel: 'Faculty',
+          },
+        });
       } else if (role === UserRole.ADMIN) {
         await tx.adminProfile.create({
           data: { userId: newUser.id },

@@ -15,7 +15,7 @@ import {
 const router = Router();
 
 router.use(authenticate);
-router.use(authorize(UserRole.STUDENT));
+router.use(authorize(UserRole.STUDENT, UserRole.TEACHER));
 
 router.post(
   '/ask-tutor',

@@ -21,6 +21,11 @@ export const notificationService = {
     return res.data.data!;
   },
 
+  async getNotificationById(id: string): Promise<NotificationItem> {
+    const res = await apiClient.get<ApiResponse<{ notification: NotificationItem }>>(`/notifications/${id}`);
+    return res.data.data!.notification;
+  },
+
   async markAsRead(id: string): Promise<void> {
     await apiClient.patch(`/notifications/${id}/read`);
   },

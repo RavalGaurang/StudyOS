@@ -17,6 +17,12 @@ router.get(
   asyncHandler((req, res) => timetableController.getTimetable(req, res))
 );
 
+router.get(
+  '/:id',
+  authorize(UserRole.STUDENT, UserRole.PARENT),
+  asyncHandler((req, res) => timetableController.getEventById(req, res))
+);
+
 router.post(
   '/',
   authorize(UserRole.STUDENT),

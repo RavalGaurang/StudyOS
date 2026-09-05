@@ -263,6 +263,43 @@ export class SubjectService {
 
     return { success: true };
   }
+
+  async getUnitById(unitId: string, studentId: string) {
+    const unit = await prisma.unit.findFirst({
+      where: { id: unitId, subject: { studentId } },
+      include: {
+        topics: { orderBy: { orderIndex: 'asc' } },
+        subject: { select: { id: true, name: true, code: true, color: true } },
+      },
+    });
+
+    if (!unit) {
+      throw new NotFoundError('Unit not found or access denied');
+    }
+
+    return unit;
+  }
+
+  async getTopicById(topicId: string, studentId: string) {
+    const topic = await prisma.topic.findFirst({
+      where: { id: topicId, unit: { subject: { studentId } } },
+      include: {
+        unit: {
+          select: {
+            id: true,
+            title: true,
+            subject: { select: { id: true, name: true, code: true, color: true } },
+          },
+        },
+      },
+    });
+
+    if (!topic) {
+      throw new NotFoundError('Topic not found or access denied');
+    }
+
+    return topic;
+  }
 }
 
 export const subjectService = new SubjectService();

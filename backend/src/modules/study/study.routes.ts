@@ -24,6 +24,12 @@ router.get(
   asyncHandler((req, res) => studyController.getSessions(req, res))
 );
 
+router.get(
+  '/sessions/:id',
+  authorize(UserRole.STUDENT, UserRole.PARENT),
+  asyncHandler((req, res) => studyController.getSessionById(req, res))
+);
+
 router.post(
   '/sessions',
   authorize(UserRole.STUDENT),
@@ -36,6 +42,12 @@ router.get(
   '/plans',
   authorize(UserRole.STUDENT),
   asyncHandler((req, res) => studyController.getPlans(req, res))
+);
+
+router.get(
+  '/plans/:id',
+  authorize(UserRole.STUDENT),
+  asyncHandler((req, res) => studyController.getPlanById(req, res))
 );
 
 router.post(
@@ -57,6 +69,12 @@ router.get(
   '/goals',
   authorize(UserRole.STUDENT, UserRole.PARENT),
   asyncHandler((req, res) => studyController.getGoals(req, res))
+);
+
+router.get(
+  '/goals/:id',
+  authorize(UserRole.STUDENT, UserRole.PARENT),
+  asyncHandler((req, res) => studyController.getGoalById(req, res))
 );
 
 router.post(

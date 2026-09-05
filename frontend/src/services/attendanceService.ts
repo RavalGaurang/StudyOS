@@ -32,6 +32,16 @@ export const attendanceService = {
     return res.data.data!;
   },
 
+  async getAttendanceById(id: string): Promise<AttendanceRecord> {
+    const res = await apiClient.get<ApiResponse<{ record: AttendanceRecord }>>(`/attendance/${id}`);
+    return res.data.data!.record;
+  },
+
+  async getAttendanceSummary(params: any = {}): Promise<{ metrics: AttendanceAnalyticsResponse['metrics']; subjectBreakdown: AttendanceAnalyticsResponse['subjectBreakdown'] }> {
+    const res = await apiClient.get<ApiResponse<any>>('/attendance/summary', { params });
+    return res.data.data!;
+  },
+
   async recordAttendance(data: any): Promise<AttendanceRecord> {
     const res = await apiClient.post<ApiResponse<{ record: AttendanceRecord }>>('/attendance', data);
     return res.data.data!.record;

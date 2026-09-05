@@ -26,6 +26,29 @@ export class TimetableService {
     });
   }
 
+  async getEventById(eventId: string, studentId: string) {
+    const event = await prisma.timetableEvent.findFirst({
+      where: { id: eventId, studentId },
+      include: {
+        subject: {
+          select: {
+            id: true,
+            name: true,
+            code: true,
+            color: true,
+            icon: true,
+          },
+        },
+      },
+    });
+
+    if (!event) {
+      throw new NotFoundError('Timetable event not found or access denied');
+    }
+
+    return event;
+  }
+
   async createEvent(studentId: string, input: CreateTimetableEventInput) {
     return prisma.timetableEvent.create({
       data: {

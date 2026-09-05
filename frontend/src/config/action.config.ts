@@ -48,8 +48,10 @@ export const ACTION_CONFIG = {
   // Flashcards Endpoints
   FLASHCARDS: {
     BASE: '/flashcards',
-    DECKS: '/flashcards/decks',
-    REVIEW: '/flashcards/review',
+    DECKS: '/quizzes/flashcards/decks',
+    DECK_BY_ID: (id: string) => `/quizzes/flashcards/decks/${id}`,
+    CARD_BY_ID: (id: string) => `/quizzes/flashcards/cards/${id}`,
+    REVIEW: (id: string) => `/quizzes/flashcards/cards/${id}/review`,
   },
 
   // Quizzes Endpoints
@@ -68,6 +70,7 @@ export const ACTION_CONFIG = {
   // Attendance Endpoints
   ATTENDANCE: {
     BASE: '/attendance',
+    BY_ID: (id: string) => `/attendance/${id}`,
     SUMMARY: '/attendance/summary',
   },
 
@@ -75,6 +78,24 @@ export const ACTION_CONFIG = {
   ASSIGNMENTS: {
     BASE: '/assignments',
     BY_ID: (id: string) => `/assignments/${id}`,
+  },
+
+  // Study & Goals Endpoints
+  STUDY: {
+    SESSIONS: '/study/sessions',
+    SESSION_BY_ID: (id: string) => `/study/sessions/${id}`,
+    PLANS: '/study/plans',
+    PLAN_BY_ID: (id: string) => `/study/plans/${id}`,
+    GOALS: '/study/goals',
+    GOAL_BY_ID: (id: string) => `/study/goals/${id}`,
+  },
+
+  // Notifications Endpoints
+  NOTIFICATIONS: {
+    BASE: '/notifications',
+    BY_ID: (id: string) => `/notifications/${id}`,
+    READ: (id: string) => `/notifications/${id}/read`,
+    READ_ALL: '/notifications/read-all',
   },
 
   // AI Assistant Endpoints

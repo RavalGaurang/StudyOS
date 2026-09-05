@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { setPomodoroModalOpen, updatePomodoro, resetPomodoro } from '../../store/slices/uiSlice';
-import { Modal } from '../ui/Modal';
+import { FormLayout } from '../ui/FormLayout';
 import { Button } from '../ui/Button';
 import { Play, Pause, RotateCcw, Check, Sparkles } from 'lucide-react';
 import { subjectService } from '../../services/subjectService';
@@ -81,7 +81,7 @@ export const PomodoroModal: React.FC = () => {
   };
 
   return (
-    <Modal
+    <FormLayout
       isOpen={pomodoroModalOpen}
       onClose={() => dispatch(setPomodoroModalOpen(false))}
       title="Study Timer & Pomodoro Focus"
@@ -198,6 +198,6 @@ export const PomodoroModal: React.FC = () => {
           )}
         </div>
       </div>
-    </Modal>
+    </FormLayout>
   );
 };

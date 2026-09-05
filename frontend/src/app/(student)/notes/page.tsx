@@ -8,7 +8,7 @@ import { Subject } from '../../../types/academic.types';
 import { Card } from '../../../components/ui/Card';
 import { Button } from '../../../components/ui/Button';
 import { Badge } from '../../../components/ui/Badge';
-import { Modal } from '../../../components/ui/Modal';
+import { FormLayout } from '../../../components/ui/FormLayout';
 import { FormInput } from '../../../components/ui/FormInput';
 import { FormSelect } from '../../../components/ui/FormSelect';
 import { FormTextarea } from '../../../components/ui/FormTextarea';
@@ -347,7 +347,7 @@ export default function NotesPage() {
       )}
 
       {/* Modal: Create Note */}
-      <Modal
+      <FormLayout
         isOpen={isCreateOpen}
         onClose={() => setIsCreateOpen(false)}
         title="Create New Markdown Note"
@@ -395,7 +395,7 @@ export default function NotesPage() {
             </Button>
           </div>
         </form>
-      </Modal>
+      </FormLayout>
     </div>
   );
 }

@@ -7,7 +7,7 @@ import { Subject, Unit, Topic } from '../../../../types/academic.types';
 import { Card } from '../../../../components/ui/Card';
 import { Button } from '../../../../components/ui/Button';
 import { Badge } from '../../../../components/ui/Badge';
-import { Modal } from '../../../../components/ui/Modal';
+import { FormLayout } from '../../../../components/ui/FormLayout';
 import { FormInput } from '../../../../components/ui/FormInput';
 import { FormTextarea } from '../../../../components/ui/FormTextarea';
 import { useForm } from 'react-hook-form';
@@ -297,11 +297,12 @@ export default function SubjectDetailPage() {
       </div>
 
       {/* Modal: Add Unit */}
-      <Modal
+      <FormLayout
         isOpen={isAddUnitOpen}
         onClose={() => setIsAddUnitOpen(false)}
         title="Add Course Unit"
         description={`Add a new unit to ${subject.name}`}
+        size="md"
       >
         <form onSubmit={unitForm.handleSubmit(onAddUnit)} className="space-y-4">
           <FormInput
@@ -326,14 +327,15 @@ export default function SubjectDetailPage() {
             </Button>
           </div>
         </form>
-      </Modal>
+      </FormLayout>
 
       {/* Modal: Add Topic */}
-      <Modal
+      <FormLayout
         isOpen={!!activeUnitForTopic}
         onClose={() => setActiveUnitForTopic(null)}
         title="Add Topic to Unit"
         description="Add a specific syllabus topic or sub-concept."
+        size="md"
       >
         <form onSubmit={topicForm.handleSubmit(onAddTopic)} className="space-y-4">
           <FormInput
@@ -352,7 +354,7 @@ export default function SubjectDetailPage() {
             </Button>
           </div>
         </form>
-      </Modal>
+      </FormLayout>
     </div>
   );
 }

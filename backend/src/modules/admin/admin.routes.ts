@@ -13,6 +13,11 @@ router.use(authenticate);
 router.use(authorize(UserRole.ADMIN));
 
 router.get(
+  '/stats',
+  asyncHandler((req, res) => adminController.getStats(req, res))
+);
+
+router.get(
   '/users',
   validateRequest({ query: userQuerySchema }),
   asyncHandler((req, res) => adminController.getUsers(req, res))

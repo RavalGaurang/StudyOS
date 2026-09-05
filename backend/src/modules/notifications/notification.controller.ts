@@ -8,6 +8,11 @@ export class NotificationController {
     return sendSuccess(res, 'Notifications retrieved successfully', result);
   }
 
+  async getNotificationById(req: Request, res: Response) {
+    const notification = await notificationService.getNotificationById(req.params.id, req.user!.id);
+    return sendSuccess(res, 'Notification retrieved successfully', { notification });
+  }
+
   async markAsRead(req: Request, res: Response) {
     const notification = await notificationService.markAsRead(req.params.id, req.user!.id);
     return sendSuccess(res, 'Notification marked as read', { notification });

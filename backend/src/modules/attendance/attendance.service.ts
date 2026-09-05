@@ -198,6 +198,34 @@ export class AttendanceService {
 
     return { success: true };
   }
+
+  async getAttendanceById(attendanceId: string, studentId: string) {
+    const record = await prisma.attendance.findFirst({
+      where: { id: attendanceId, studentId },
+      include: {
+        subject: {
+          select: {
+            id: true,
+            name: true,
+            code: true,
+            color: true,
+            icon: true,
+          },
+        },
+      },
+    });
+
+    if (!record) {
+      throw new NotFoundError('Attendance record not found or access denied');
+    }
+
+    return record;
+  }
+
+  async getAttendanceSummary(studentId: string, subjectId?: string, startDate?: string, endDate?: string) {
+    const { metrics, subjectBreakdown } = await this.getStudentAttendance(studentId, subjectId, startDate, endDate);
+    return { metrics, subjectBreakdown };
+  }
 }
 
 export const attendanceService = new AttendanceService();

@@ -20,6 +20,12 @@ export class TimetableController {
     return sendSuccess(res, 'Timetable events retrieved successfully', { events });
   }
 
+  async getEventById(req: Request, res: Response) {
+    const studentId = this.getStudentId(req);
+    const event = await timetableService.getEventById(req.params.id, studentId);
+    return sendSuccess(res, 'Timetable event retrieved successfully', { event });
+  }
+
   async createEvent(req: Request, res: Response) {
     const studentId = this.getStudentId(req);
     const event = await timetableService.createEvent(studentId, req.body);

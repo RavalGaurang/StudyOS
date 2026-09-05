@@ -7,12 +7,13 @@ import { Badge } from '../ui/Badge';
 import { UserStatusSwitch } from './UserStatusSwitch';
 import { User } from '@/types/user.types';
 import { formatDate } from '@/lib/utils';
-import { Edit2, Trash2, ShieldCheck, UserCheck } from 'lucide-react';
+import { Edit2, Trash2, ShieldCheck, UserCheck, Loader2 } from 'lucide-react';
 import { UserRole, USER_ROLES } from '@/enums/app.enum';
 
 export interface UserTableProps {
   users: User[];
   isLoading: boolean;
+  fetchingUserId?: string | null;
   onEditUser: (user: User) => void;
   onDeleteUser: (user: User) => void;
 }
@@ -20,6 +21,7 @@ export interface UserTableProps {
 export const UserTable: React.FC<UserTableProps> = ({
   users,
   isLoading,
+  fetchingUserId,
   onEditUser,
   onDeleteUser,
 }) => {
@@ -104,32 +106,41 @@ export const UserTable: React.FC<UserTableProps> = ({
     {
       header: 'Actions',
       className: 'text-right',
-      accessor: (user) => (
-        <div className="flex items-center justify-end gap-1">
-          <button
-            type="button"
-            title="Edit User"
-            onClick={(e) => {
-              e.stopPropagation();
-              onEditUser(user);
-            }}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 dark:hover:text-indigo-400 transition-colors"
-          >
-            <Edit2 className="w-4 h-4" />
-          </button>
-          <button
-            type="button"
-            title="Delete User"
-            onClick={(e) => {
-              e.stopPropagation();
-              onDeleteUser(user);
-            }}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 dark:hover:text-rose-400 transition-colors"
-          >
-            <Trash2 className="w-4 h-4" />
-          </button>
-        </div>
-      ),
+      accessor: (user) => {
+        const isFetching = fetchingUserId === user.id;
+        return (
+          <div className="flex items-center justify-end gap-1">
+            <button
+              type="button"
+              title="Edit User"
+              disabled={isFetching}
+              onClick={(e) => {
+                e.stopPropagation();
+                onEditUser(user);
+              }}
+              className="p-1.5 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 dark:hover:text-indigo-400 transition-colors disabled:opacity-50"
+            >
+              {isFetching ? (
+                <Loader2 className="w-4 h-4 animate-spin text-indigo-600 dark:text-indigo-400" />
+              ) : (
+                <Edit2 className="w-4 h-4" />
+              )}
+            </button>
+            <button
+              type="button"
+              title="Delete User"
+              disabled={isFetching}
+              onClick={(e) => {
+                e.stopPropagation();
+                onDeleteUser(user);
+              }}
+              className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 dark:hover:text-rose-400 transition-colors disabled:opacity-50"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+          </div>
+        );
+      },
     },
   ];
 

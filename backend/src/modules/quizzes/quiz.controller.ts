@@ -74,6 +74,12 @@ export class QuizController {
     const card = await quizService.reviewFlashcard(req.params.cardId, studentId, req.body);
     return sendSuccess(res, 'Flashcard review recorded', { card });
   }
+
+  async getCardById(req: Request, res: Response) {
+    const studentId = this.getStudentId(req);
+    const card = await quizService.getCardById(req.params.cardId, studentId);
+    return sendSuccess(res, 'Flashcard retrieved successfully', { card });
+  }
 }
 
 export const quizController = new QuizController();

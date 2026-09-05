@@ -10,6 +10,11 @@ export const timetableService = {
     return res.data.data?.events || [];
   },
 
+  async getEventById(id: string): Promise<TimetableEvent> {
+    const res = await apiClient.get<ApiResponse<{ event: TimetableEvent }>>(`/timetable/${id}`);
+    return res.data.data!.event;
+  },
+
   async createEvent(data: any): Promise<TimetableEvent> {
     const res = await apiClient.post<ApiResponse<{ event: TimetableEvent }>>('/timetable', data);
     return res.data.data!.event;

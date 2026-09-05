@@ -6,7 +6,7 @@ import { Subject } from '../../../types/academic.types';
 import { Card } from '../../../components/ui/Card';
 import { Button } from '../../../components/ui/Button';
 import { Badge } from '../../../components/ui/Badge';
-import { Modal } from '../../../components/ui/Modal';
+import { FormLayout } from '../../../components/ui/FormLayout';
 import { FormInput } from '../../../components/ui/FormInput';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -187,11 +187,12 @@ export default function SubjectsPage() {
       )}
 
       {/* Create Subject Modal */}
-      <Modal
+      <FormLayout
         isOpen={isCreateOpen}
         onClose={() => setIsCreateOpen(false)}
         title="Add New Subject"
         description="Enter course details to add to your semester curriculum."
+        size="md"
       >
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <FormInput
@@ -241,7 +242,7 @@ export default function SubjectsPage() {
             </Button>
           </div>
         </form>
-      </Modal>
+      </FormLayout>
     </div>
   );
 }

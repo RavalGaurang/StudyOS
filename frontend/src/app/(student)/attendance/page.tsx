@@ -7,7 +7,7 @@ import { Subject } from '../../../types/academic.types';
 import { Card } from '../../../components/ui/Card';
 import { Button } from '../../../components/ui/Button';
 import { Badge } from '../../../components/ui/Badge';
-import { Modal } from '../../../components/ui/Modal';
+import { FormLayout } from '../../../components/ui/FormLayout';
 import { Table } from '../../../components/ui/Table';
 import { FormInput } from '../../../components/ui/FormInput';
 import { FormSelect } from '../../../components/ui/FormSelect';
@@ -286,11 +286,12 @@ export default function AttendancePage() {
       </Card>
 
       {/* Modal: Mark Attendance */}
-      <Modal
+      <FormLayout
         isOpen={isRecordOpen}
         onClose={() => setIsRecordOpen(false)}
         title="Mark Class Attendance"
         description="Record your attendance for a specific lecture or lab session."
+        size="md"
       >
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <FormSelect
@@ -338,7 +339,7 @@ export default function AttendancePage() {
             </Button>
           </div>
         </form>
-      </Modal>
+      </FormLayout>
     </div>
   );
 }

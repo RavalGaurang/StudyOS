@@ -8,7 +8,7 @@ import { Subject } from '../../../types/academic.types';
 import { Card } from '../../../components/ui/Card';
 import { Button } from '../../../components/ui/Button';
 import { Badge } from '../../../components/ui/Badge';
-import { Modal } from '../../../components/ui/Modal';
+import { FormLayout } from '../../../components/ui/FormLayout';
 import { FormInput } from '../../../components/ui/FormInput';
 import { FormSelect } from '../../../components/ui/FormSelect';
 import { FormTextarea } from '../../../components/ui/FormTextarea';
@@ -288,11 +288,12 @@ export default function FlashcardsPage() {
       )}
 
       {/* Modal: Create Deck */}
-      <Modal
+      <FormLayout
         isOpen={isCreateDeckOpen}
         onClose={() => setIsCreateDeckOpen(false)}
         title="Create Flashcard Deck"
         description="Create a deck linked to an enrolled subject or general study topic."
+        size="md"
       >
         <form onSubmit={deckForm.handleSubmit(onCreateDeck)} className="space-y-4">
           <FormInput
@@ -324,14 +325,15 @@ export default function FlashcardsPage() {
             </Button>
           </div>
         </form>
-      </Modal>
+      </FormLayout>
 
       {/* Modal: Add Card to Deck */}
-      <Modal
+      <FormLayout
         isOpen={isAddCardOpen}
         onClose={() => setIsAddCardOpen(false)}
         title="Add Flashcard"
         description={`Add a new flashcard to ${selectedDeck?.title}`}
+        size="md"
       >
         <form onSubmit={cardForm.handleSubmit(onAddCard)} className="space-y-4">
           <FormTextarea
@@ -357,7 +359,7 @@ export default function FlashcardsPage() {
             </Button>
           </div>
         </form>
-      </Modal>
+      </FormLayout>
     </div>
   );
 }

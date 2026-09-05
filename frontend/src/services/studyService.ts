@@ -17,10 +17,20 @@ export const studyService = {
     return res.data.data!.session;
   },
 
+  async getSessionById(id: string): Promise<StudySession> {
+    const res = await apiClient.get<ApiResponse<{ session: StudySession }>>(`/study/sessions/${id}`);
+    return res.data.data!.session;
+  },
+
   // Plans
   async getPlans(): Promise<StudyPlan[]> {
     const res = await apiClient.get<ApiResponse<{ plans: StudyPlan[] }>>('/study/plans');
     return res.data.data?.plans || [];
+  },
+
+  async getPlanById(id: string): Promise<StudyPlan> {
+    const res = await apiClient.get<ApiResponse<{ plan: StudyPlan }>>(`/study/plans/${id}`);
+    return res.data.data!.plan;
   },
 
   async createPlan(data: any): Promise<StudyPlan> {
@@ -36,6 +46,11 @@ export const studyService = {
   async getGoals(): Promise<Goal[]> {
     const res = await apiClient.get<ApiResponse<{ goals: Goal[] }>>('/study/goals');
     return res.data.data?.goals || [];
+  },
+
+  async getGoalById(id: string): Promise<Goal> {
+    const res = await apiClient.get<ApiResponse<{ goal: Goal }>>(`/study/goals/${id}`);
+    return res.data.data!.goal;
   },
 
   async createGoal(data: any): Promise<Goal> {

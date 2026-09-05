@@ -61,6 +61,18 @@ export class NotificationService {
       },
     });
   }
+
+  async getNotificationById(notificationId: string, userId: string) {
+    const notif = await prisma.notification.findFirst({
+      where: { id: notificationId, userId },
+    });
+
+    if (!notif) {
+      throw new NotFoundError('Notification not found');
+    }
+
+    return notif;
+  }
 }
 
 export const notificationService = new NotificationService();

@@ -97,6 +97,42 @@ export class AdminService {
 
     return updated;
   }
+
+  async getStats() {
+    const [
+      totalUsers,
+      totalStudents,
+      totalParents,
+      totalTeachers,
+      totalSubjects,
+      totalTasks,
+      totalStudySessions,
+      studySessions,
+    ] = await Promise.all([
+      prisma.user.count(),
+      prisma.user.count({ where: { role: 'STUDENT' } }),
+      prisma.user.count({ where: { role: 'PARENT' } }),
+      prisma.user.count({ where: { role: 'TEACHER' } }),
+      prisma.subject.count(),
+      prisma.task.count(),
+      prisma.studySession.count(),
+      prisma.studySession.findMany({ select: { durationMinutes: true } }),
+    ]);
+
+    const totalMinutes = studySessions.reduce((acc, s) => acc + (s.durationMinutes || 0), 0);
+    const totalStudyHours = Math.round((totalMinutes / 60) * 10) / 10;
+
+    return {
+      totalUsers,
+      totalStudents,
+      totalParents,
+      totalTeachers,
+      totalSubjects,
+      totalTasks,
+      totalStudySessions,
+      totalStudyHours,
+    };
+  }
 }
 
 export const adminService = new AdminService();

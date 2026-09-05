@@ -152,7 +152,7 @@ export default function AiAssistantPage() {
               <Select
                 label="Subject Context (Optional)"
                 value={selectedSubject}
-                onChange={(e) => setSelectedSubject(e.target.value)}
+                onChange={(e: any) => setSelectedSubject(e.target.value)}
                 options={[
                   { value: '', label: '-- General Science & Engineering --' },
                   ...subjects.map((s) => ({ value: s.name, label: s.name })),

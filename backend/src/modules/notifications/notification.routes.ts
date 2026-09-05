@@ -12,6 +12,11 @@ router.get(
   asyncHandler((req, res) => notificationController.getNotifications(req, res))
 );
 
+router.get(
+  '/:id',
+  asyncHandler((req, res) => notificationController.getNotificationById(req, res))
+);
+
 router.patch(
   '/:id/read',
   asyncHandler((req, res) => notificationController.markAsRead(req, res))

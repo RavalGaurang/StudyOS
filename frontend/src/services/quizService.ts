@@ -52,6 +52,11 @@ export const quizService = {
     return res.data.data!.card;
   },
 
+  async getCardById(cardId: string): Promise<Flashcard> {
+    const res = await apiClient.get<ApiResponse<{ card: Flashcard }>>(`/quizzes/flashcards/cards/${cardId}`);
+    return res.data.data!.card;
+  },
+
   async reviewCard(cardId: string, masteryLevel: number): Promise<Flashcard> {
     const res = await apiClient.patch<ApiResponse<{ card: Flashcard }>>(`/quizzes/flashcards/cards/${cardId}/review`, {
       masteryLevel,

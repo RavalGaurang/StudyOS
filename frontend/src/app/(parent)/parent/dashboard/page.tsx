@@ -6,7 +6,7 @@ import { StudentDashboardAnalytics } from '../../../../services/analyticsService
 import { Card } from '../../../../components/ui/Card';
 import { Button } from '../../../../components/ui/Button';
 import { Badge } from '../../../../components/ui/Badge';
-import { Modal } from '../../../../components/ui/Modal';
+import { FormLayout } from '../../../../components/ui/FormLayout';
 import { FormInput } from '../../../../components/ui/FormInput';
 import { FormSelect } from '../../../../components/ui/FormSelect';
 import { LoadingState } from '../../../../components/ui/LoadingState';
@@ -310,11 +310,12 @@ export default function ParentDashboardPage() {
       )}
 
       {/* Modal: Link Student */}
-      <Modal
+      <FormLayout
         isOpen={isLinkOpen}
         onClose={() => setIsLinkOpen(false)}
         title="Link Student Account"
         description="Connect your child's student profile by entering their registered email address."
+        size="md"
       >
         <form onSubmit={handleSubmit(onLinkSubmit)} className="space-y-4">
           <FormInput
@@ -346,7 +347,7 @@ export default function ParentDashboardPage() {
             </Button>
           </div>
         </form>
-      </Modal>
+      </FormLayout>
     </div>
   );
 }

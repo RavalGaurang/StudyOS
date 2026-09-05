@@ -248,6 +248,21 @@ export class QuizService {
     });
   }
 
+  async getCardById(cardId: string, studentId: string) {
+    const card = await prisma.flashcard.findFirst({
+      where: { id: cardId, deck: { studentId } },
+      include: {
+        deck: { select: { id: true, title: true } },
+      },
+    });
+
+    if (!card) {
+      throw new NotFoundError('Flashcard not found or access denied');
+    }
+
+    return card;
+  }
+
   async reviewFlashcard(cardId: string, studentId: string, input: ReviewFlashcardInput) {
     const card = await prisma.flashcard.findFirst({
       where: { id: cardId, deck: { studentId } },

@@ -62,6 +62,12 @@ export class SubjectController {
     return sendSuccess(res, 'Unit deleted successfully');
   }
 
+  async getUnitById(req: Request, res: Response) {
+    const studentId = this.getStudentId(req);
+    const unit = await subjectService.getUnitById(req.params.id, studentId);
+    return sendSuccess(res, 'Unit retrieved successfully', { unit });
+  }
+
   // Topics
   async createTopic(req: Request, res: Response) {
     const studentId = this.getStudentId(req);
@@ -79,6 +85,12 @@ export class SubjectController {
     const studentId = this.getStudentId(req);
     await subjectService.deleteTopic(req.params.id, studentId);
     return sendSuccess(res, 'Topic deleted successfully');
+  }
+
+  async getTopicById(req: Request, res: Response) {
+    const studentId = this.getStudentId(req);
+    const topic = await subjectService.getTopicById(req.params.id, studentId);
+    return sendSuccess(res, 'Topic retrieved successfully', { topic });
   }
 }
 

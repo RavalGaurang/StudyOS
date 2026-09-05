@@ -7,7 +7,7 @@ import { Exam, Subject } from '../../../types/academic.types';
 import { Card } from '../../../components/ui/Card';
 import { Button } from '../../../components/ui/Button';
 import { Badge } from '../../../components/ui/Badge';
-import { Modal } from '../../../components/ui/Modal';
+import { FormLayout } from '../../../components/ui/FormLayout';
 import { FormInput } from '../../../components/ui/FormInput';
 import { FormSelect } from '../../../components/ui/FormSelect';
 import { FormTextarea } from '../../../components/ui/FormTextarea';
@@ -226,11 +226,12 @@ export default function ExamsPage() {
       )}
 
       {/* Modal: Schedule Exam */}
-      <Modal
+      <FormLayout
         isOpen={isCreateOpen}
         onClose={() => setIsCreateOpen(false)}
         title="Schedule Exam / Test"
         description="Add examination date, room location, and grade weightage."
+        size="md"
       >
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <FormInput
@@ -308,7 +309,7 @@ export default function ExamsPage() {
             </Button>
           </div>
         </form>
-      </Modal>
+      </FormLayout>
 
       <ConfirmDialog
         isOpen={!!deleteId}

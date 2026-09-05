@@ -196,6 +196,55 @@ export class StudyService {
 
     return { success: true };
   }
+
+  async getGoalById(goalId: string, studentId: string) {
+    const goal = await prisma.goal.findFirst({
+      where: { id: goalId, studentId },
+    });
+
+    if (!goal) {
+      throw new NotFoundError('Goal not found or access denied');
+    }
+
+    return goal;
+  }
+
+  async getSessionById(sessionId: string, studentId: string) {
+    const session = await prisma.studySession.findFirst({
+      where: { id: sessionId, studentId },
+      include: {
+        subject: { select: { id: true, name: true, code: true, color: true, icon: true } },
+        topic: { select: { id: true, title: true } },
+      },
+    });
+
+    if (!session) {
+      throw new NotFoundError('Study session not found or access denied');
+    }
+
+    return session;
+  }
+
+  async getPlanById(planId: string, studentId: string) {
+    const plan = await prisma.studyPlan.findFirst({
+      where: { id: planId, studentId },
+      include: {
+        items: {
+          include: {
+            subject: { select: { id: true, name: true, color: true } },
+            unit: { select: { id: true, title: true } },
+            topic: { select: { id: true, title: true } },
+          },
+        },
+      },
+    });
+
+    if (!plan) {
+      throw new NotFoundError('Study plan not found or access denied');
+    }
+
+    return plan;
+  }
 }
 
 export const studyService = new StudyService();

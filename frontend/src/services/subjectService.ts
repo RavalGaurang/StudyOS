@@ -31,6 +31,11 @@ export const subjectService = {
   },
 
   // Units
+  async getUnitById(id: string): Promise<Unit> {
+    const res = await apiClient.get<ApiResponse<{ unit: Unit }>>(ACTION_CONFIG.SUBJECTS.UNIT_BY_ID(id));
+    return res.data.data!.unit;
+  },
+
   async createUnit(subjectId: string, data: any): Promise<Unit> {
     const res = await apiClient.post<ApiResponse<{ unit: Unit }>>(ACTION_CONFIG.SUBJECTS.UNITS(subjectId), data);
     return res.data.data!.unit;
@@ -46,6 +51,11 @@ export const subjectService = {
   },
 
   // Topics
+  async getTopicById(id: string): Promise<Topic> {
+    const res = await apiClient.get<ApiResponse<{ topic: Topic }>>(ACTION_CONFIG.SUBJECTS.TOPIC_BY_ID(id));
+    return res.data.data!.topic;
+  },
+
   async createTopic(unitId: string, data: any): Promise<Topic> {
     const res = await apiClient.post<ApiResponse<{ topic: Topic }>>(ACTION_CONFIG.SUBJECTS.TOPICS(unitId), data);
     return res.data.data!.topic;

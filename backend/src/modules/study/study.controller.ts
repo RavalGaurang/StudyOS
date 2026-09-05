@@ -20,6 +20,12 @@ export class StudyController {
     return sendSuccess(res, 'Study sessions retrieved successfully', result);
   }
 
+  async getSessionById(req: Request, res: Response) {
+    const studentId = this.getStudentId(req);
+    const session = await studyService.getSessionById(req.params.id, studentId);
+    return sendSuccess(res, 'Study session retrieved successfully', { session });
+  }
+
   async logSession(req: Request, res: Response) {
     const studentId = this.getStudentId(req);
     const session = await studyService.logStudySession(studentId, req.body);
@@ -31,6 +37,12 @@ export class StudyController {
     const studentId = this.getStudentId(req);
     const plans = await studyService.getStudyPlans(studentId);
     return sendSuccess(res, 'Study plans retrieved successfully', { plans });
+  }
+
+  async getPlanById(req: Request, res: Response) {
+    const studentId = this.getStudentId(req);
+    const plan = await studyService.getPlanById(req.params.id, studentId);
+    return sendSuccess(res, 'Study plan retrieved successfully', { plan });
   }
 
   async createPlan(req: Request, res: Response) {
@@ -50,6 +62,12 @@ export class StudyController {
     const studentId = this.getStudentId(req);
     const goals = await studyService.getGoals(studentId);
     return sendSuccess(res, 'Goals retrieved successfully', { goals });
+  }
+
+  async getGoalById(req: Request, res: Response) {
+    const studentId = this.getStudentId(req);
+    const goal = await studyService.getGoalById(req.params.id, studentId);
+    return sendSuccess(res, 'Goal retrieved successfully', { goal });
   }
 
   async createGoal(req: Request, res: Response) {

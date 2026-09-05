@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import { cn } from '../../lib/utils';
-import { X } from 'lucide-react';
+import React from 'react';
+import { FormLayout, FormLayoutSize } from './FormLayout';
 
 export interface ModalProps {
   isOpen: boolean;
@@ -11,63 +10,43 @@ export interface ModalProps {
   description?: string;
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
   children: React.ReactNode;
+  icon?: React.ReactNode;
+  isLoading?: boolean;
+  footer?: React.ReactNode;
 }
 
+/**
+ * Modal is now powered by FormLayout across the entire project,
+ * providing responsive sizing (sm, md, lg, full), backdrop-blur,
+ * and unified loading states.
+ */
 export const Modal: React.FC<ModalProps> = ({
   isOpen,
   onClose,
-  title,
+  title = '',
   description,
   size = 'md',
   children,
+  icon,
+  isLoading = false,
+  footer,
 }) => {
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
-        onClose();
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
-
-  if (!isOpen) return null;
-
-  const sizes = {
-    sm: 'max-w-sm',
-    md: 'max-w-lg',
-    lg: 'max-w-2xl',
-    xl: 'max-w-4xl',
-    full: 'max-w-6xl',
-  };
+  const mappedSize: FormLayoutSize = size === 'xl' ? 'lg' : (size as FormLayoutSize);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div
-        className={cn(
-          'relative w-full rounded-2xl border border-slate-200 bg-white p-4 sm:p-6 shadow-xl dark:border-slate-800 dark:bg-slate-900 max-h-[90vh] flex flex-col',
-          sizes[size]
-        )}
-      >
-        <div className="flex items-start justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
-          <div>
-            {title && (
-              <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">{title}</h3>
-            )}
-            {description && (
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{description}</p>
-            )}
-          </div>
-          <button
-            onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 dark:hover:text-slate-200 transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        <div className="overflow-y-auto py-4 flex-1">{children}</div>
-      </div>
-    </div>
+    <FormLayout
+      isOpen={isOpen}
+      onClose={onClose}
+      title={title}
+      description={description}
+      size={mappedSize}
+      icon={icon}
+      isLoading={isLoading}
+      footer={footer}
+    >
+      {children}
+    </FormLayout>
   );
 };
+
+export default Modal;

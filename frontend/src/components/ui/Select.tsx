@@ -63,12 +63,21 @@ export const Select = React.forwardRef<any, SelectProps>(
         : undefined);
 
     // Map string/number value to SelectOption object
-    const getOptionFromValue = (val: any) => {
-      if (val === null || val === undefined || val === '') return null;
-      if (typeof val === 'object' && 'value' in val) return val;
-      return options.find((opt) => String(opt.value) === String(val)) || {
-        value: val,
-        label: String(val),
+    const getOptionFromValue = (rawVal: any) => {
+      if (rawVal === null || rawVal === undefined || rawVal === '') return null;
+      // If an event object or target object was passed accidentally, extract inner value
+      let val = rawVal?.target?.value !== undefined ? rawVal.target.value : (rawVal?.target ? rawVal.target : rawVal);
+      if (typeof val === 'object' && val !== null && 'value' in val && !('label' in val)) {
+        val = val.value;
+      }
+      if (typeof val === 'object' && val !== null && 'value' in val && 'label' in val) {
+        return val;
+      }
+      const found = options.find((opt) => String(opt.value) === String(val));
+      if (found) return found;
+      return {
+        value: typeof val === 'object' ? (val?.value ?? '') : val,
+        label: typeof val === 'object' ? String(val?.label || val?.value || '') : String(val),
       };
     };
 
@@ -163,10 +172,10 @@ export const Select = React.forwardRef<any, SelectProps>(
       if (!onChange) return;
       if (isMulti) {
         const values = selectedOption ? selectedOption.map((opt: any) => opt.value) : [];
-        onChange({ target: { name, value: values } });
+        onChange({ target: { name, value: values }, value: values });
       } else {
         const val = selectedOption ? selectedOption.value : '';
-        onChange({ target: { name, value: val } });
+        onChange({ target: { name, value: val }, value: val });
       }
     };
 

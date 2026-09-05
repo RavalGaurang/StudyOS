@@ -60,6 +60,12 @@ router.post(
   asyncHandler((req, res) => subjectController.createUnit(req, res))
 );
 
+router.get(
+  '/units/:id',
+  authorize(UserRole.STUDENT, UserRole.PARENT),
+  asyncHandler((req, res) => subjectController.getUnitById(req, res))
+);
+
 router.patch(
   '/units/:id',
   authorize(UserRole.STUDENT),
@@ -79,6 +85,12 @@ router.post(
   authorize(UserRole.STUDENT),
   validateRequest({ body: createTopicSchema }),
   asyncHandler((req, res) => subjectController.createTopic(req, res))
+);
+
+router.get(
+  '/topics/:id',
+  authorize(UserRole.STUDENT, UserRole.PARENT),
+  asyncHandler((req, res) => subjectController.getTopicById(req, res))
 );
 
 router.patch(

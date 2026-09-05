@@ -8,7 +8,7 @@ import { Subject } from '../../../types/academic.types';
 import { Card } from '../../../components/ui/Card';
 import { Button } from '../../../components/ui/Button';
 import { Badge } from '../../../components/ui/Badge';
-import { Modal } from '../../../components/ui/Modal';
+import { FormLayout } from '../../../components/ui/FormLayout';
 import { Table } from '../../../components/ui/Table';
 import { FormInput } from '../../../components/ui/FormInput';
 import { FormSelect } from '../../../components/ui/FormSelect';
@@ -320,11 +320,12 @@ export default function StudyPage() {
       </div>
 
       {/* Modal: Log Manual Session */}
-      <Modal
+      <FormLayout
         isOpen={isManualOpen}
         onClose={() => setIsManualOpen(false)}
         title="Log Completed Study Session"
         description="Record study time spent offline or via physical textbooks."
+        size="md"
       >
         <form onSubmit={handleSubmit(onManualSubmit)} className="space-y-4">
           <FormSelect
@@ -371,7 +372,7 @@ export default function StudyPage() {
             </Button>
           </div>
         </form>
-      </Modal>
+      </FormLayout>
     </div>
   );
 }

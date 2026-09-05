@@ -18,6 +18,18 @@ router.get(
   asyncHandler((req, res) => attendanceController.getAttendance(req, res))
 );
 
+router.get(
+  '/summary',
+  authorize(UserRole.STUDENT, UserRole.PARENT),
+  asyncHandler((req, res) => attendanceController.getAttendanceSummary(req, res))
+);
+
+router.get(
+  '/:id',
+  authorize(UserRole.STUDENT, UserRole.PARENT),
+  asyncHandler((req, res) => attendanceController.getAttendanceById(req, res))
+);
+
 router.post(
   '/',
   authorize(UserRole.STUDENT),

@@ -24,6 +24,24 @@ export class AttendanceController {
     return sendSuccess(res, 'Attendance data retrieved successfully', result);
   }
 
+  async getAttendanceById(req: Request, res: Response) {
+    const studentId = this.getStudentId(req);
+    const record = await attendanceService.getAttendanceById(req.params.id, studentId);
+    return sendSuccess(res, 'Attendance record retrieved successfully', { record });
+  }
+
+  async getAttendanceSummary(req: Request, res: Response) {
+    const studentId = this.getStudentId(req);
+    const { subjectId, startDate, endDate } = req.query;
+    const summary = await attendanceService.getAttendanceSummary(
+      studentId,
+      subjectId as string,
+      startDate as string,
+      endDate as string
+    );
+    return sendSuccess(res, 'Attendance summary retrieved successfully', summary);
+  }
+
   async recordAttendance(req: Request, res: Response) {
     const studentId = this.getStudentId(req);
     const record = await attendanceService.recordAttendance(studentId, req.body);

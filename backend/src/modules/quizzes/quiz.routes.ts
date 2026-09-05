@@ -84,4 +84,10 @@ router.patch(
   asyncHandler((req, res) => quizController.reviewCard(req, res))
 );
 
+router.get(
+  '/flashcards/cards/:cardId',
+  authorize(UserRole.STUDENT),
+  asyncHandler((req, res) => quizController.getCardById(req, res))
+);
+
 export const quizRoutes = router;
